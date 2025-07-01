@@ -121,9 +121,9 @@ class ReadMangaActivity : VMBaseActivity<ActivityMangaBinding, ReadMangaViewMode
 
     private val loadMoreView by lazy {
         LoadMoreView(this).apply {
-            setBackgroundColor(getCompatColor(R.color.book_ant_10))
-            setLoadingColor(R.color.white)
-            setLoadingTextColor(R.color.white)
+//            setBackgroundColor(getCompatColor(R.color.book_ant_10))
+//            setLoadingColor(R.color.white)
+//            setLoadingTextColor(R.color.white)
         }
     }
 

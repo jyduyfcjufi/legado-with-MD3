@@ -25,6 +25,7 @@ import io.legato.kazusa.ui.book.group.GroupEditDialog
 import io.legato.kazusa.ui.book.info.BookInfoActivity
 import io.legato.kazusa.ui.book.search.SearchActivity
 import io.legato.kazusa.ui.main.bookshelf.BaseBookshelfFragment
+import io.legato.kazusa.utils.bookshelfLayout
 import io.legato.kazusa.utils.cnCompare
 import io.legato.kazusa.utils.flowWithLifecycleAndDatabaseChangeFirst
 import io.legato.kazusa.utils.observeEvent
@@ -56,7 +57,9 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
     }
 
     private val binding by viewBinding(FragmentBookshelf2Binding::bind)
-    private val bookshelfLayout by lazy { AppConfig.bookshelfLayout }
+
+    private val bookshelfLayout by lazy { requireContext().bookshelfLayout }
+
     private val booksAdapter: BaseBooksAdapter<*> by lazy {
         if (bookshelfLayout == 0) {
             BooksAdapterList(requireContext(), this)
@@ -87,7 +90,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
         if (bookshelfLayout == 0) {
             binding.rvBookshelf.layoutManager = LinearLayoutManager(context)
         } else {
-            binding.rvBookshelf.layoutManager = GridLayoutManager(context, bookshelfLayout + 2)
+            binding.rvBookshelf.layoutManager = GridLayoutManager(context, bookshelfLayout)
         }
         binding.rvBookshelf.itemAnimator = null
         binding.rvBookshelf.adapter = booksAdapter

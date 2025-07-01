@@ -71,7 +71,7 @@ class HttpTtsEditDialog() : BaseBottomSheetDialogFragment(R.layout.dialog_http_t
 
     fun initMenu() {
         binding.toolBar.inflateMenu(R.menu.speak_engine_edit)
-        binding.toolBar.menu.applyTint(requireContext())
+        //binding.toolBar.menu.applyTint(requireContext())
         binding.toolBar.setOnMenuItemClickListener(this)
     }
 

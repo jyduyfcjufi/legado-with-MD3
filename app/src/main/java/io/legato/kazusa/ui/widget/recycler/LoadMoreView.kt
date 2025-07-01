@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.ColorRes
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import io.legato.kazusa.R
 import io.legato.kazusa.databinding.ViewLoadMoreBinding
 import io.legato.kazusa.lib.dialogs.alert
@@ -51,7 +53,7 @@ class LoadMoreView(context: Context, attrs: AttributeSet? = null) : FrameLayout(
 
     fun stopLoad() {
         isLoading = false
-        binding.rotateLoading.inVisible()
+        binding.rotateLoading.invisible()
     }
 
     fun hasMore() {
@@ -79,14 +81,6 @@ class LoadMoreView(context: Context, attrs: AttributeSet? = null) : FrameLayout(
         binding.tvText.text =
             text.ifEmpty { context.getString(R.string.error_load_msg, "点击查看详情") }
         binding.tvText.visible()
-    }
-
-    fun setLoadingColor(@ColorRes color: Int) {
-        binding.rotateLoading.loadingColor = context.getCompatColor(color)
-    }
-
-    fun setLoadingTextColor(@ColorRes color: Int) {
-        binding.tvText.setTextColor(context.getCompatColor(color))
     }
 
     private fun showErrorDialog(): Boolean {

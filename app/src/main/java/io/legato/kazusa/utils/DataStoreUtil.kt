@@ -24,6 +24,7 @@ object DataStoreUtil {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     suspend fun <T> read(context: Context, key: String, defaultValue: T): T {
         return context.dataStore.data.map { preferences ->
             when (defaultValue) {

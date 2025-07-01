@@ -1,8 +1,10 @@
 package io.legato.kazusa.ui.main.bookshelf
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
@@ -28,6 +30,7 @@ import io.legato.kazusa.ui.file.HandleFileContract
 import io.legato.kazusa.ui.main.MainFragmentInterface
 import io.legato.kazusa.ui.main.MainViewModel
 import io.legato.kazusa.ui.widget.dialog.WaitDialog
+import io.legato.kazusa.utils.bookshelfLayout
 import io.legato.kazusa.utils.checkByIndex
 import io.legato.kazusa.utils.getCheckedIndex
 import io.legato.kazusa.utils.isAbsUrl
@@ -164,7 +167,17 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
     @SuppressLint("InflateParams")
     fun configBookshelf() {
         alert(titleResource = R.string.bookshelf_layout) {
-            val bookshelfLayout = AppConfig.bookshelfLayout
+
+            val orientation = requireContext().resources.configuration.orientation
+            val bookshelfLayout = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                AppConfig.bookshelfLayoutLandscape
+            } else {
+                AppConfig.bookshelfLayoutPortrait
+            }
+
+            val isGrid = bookshelfLayout > 0
+            val columnCount = (bookshelfLayout.takeIf { it > 0 } ?: 1)
+
             val bookshelfSort = AppConfig.bookshelfSort
             val alertBinding =
                 DialogBookshelfConfigBinding.inflate(layoutInflater)
@@ -174,10 +187,20 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
                         swShowLastUpdateTime.isChecked = AppConfig.showLastUpdateTime
                         swShowWaitUpBooks.isChecked = AppConfig.showWaitUpCount
                         swShowBookshelfFastScroller.isChecked = AppConfig.showBookshelfFastScroller
-                        rgLayout.checkByIndex(bookshelfLayout)
                         rgSort.checkByIndex(bookshelfSort)
+
+                        chipList.isChecked = !isGrid
+                        chipGrid.isChecked = isGrid
+                        llGridSlider.isVisible = isGrid
+                        sliderGridCount.value = columnCount.toFloat()
+
+                        chipGroupLayout.setOnCheckedChangeListener { _, checkedId ->
+                            llGridSlider.isVisible = checkedId == R.id.chip_grid
+                        }
+
                     }
             customView { alertBinding.root }
+
             okButton {
                 alertBinding.apply {
                     var notifyMain = false
@@ -206,15 +229,30 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
                         AppConfig.bookshelfSort = rgSort.getCheckedIndex()
                         upSort()
                     }
-                    if (bookshelfLayout != rgLayout.getCheckedIndex()) {
-                        AppConfig.bookshelfLayout = rgLayout.getCheckedIndex()
-                        if (AppConfig.bookshelfLayout == 0) {
-                            activityViewModel.booksGridRecycledViewPool.clear()
+
+                    val isNowGrid = alertBinding.chipGrid.isChecked
+                    val selectedColumn = alertBinding.sliderGridCount.value.toInt()
+                    val newLayout = if (isNowGrid) selectedColumn else 0
+
+                    if (bookshelfLayout != newLayout) {
+                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            AppConfig.bookshelfLayoutLandscape = newLayout
+                            if (newLayout == 0) {
+                                activityViewModel.booksGridRecycledViewPool.clear()
+                            } else {
+                                activityViewModel.booksListRecycledViewPool.clear()
+                            }
                         } else {
-                            activityViewModel.booksListRecycledViewPool.clear()
+                            AppConfig.bookshelfLayoutPortrait = newLayout
+                            if (newLayout == 0) {
+                                activityViewModel.booksGridRecycledViewPool.clear()
+                            } else {
+                                activityViewModel.booksListRecycledViewPool.clear()
+                            }
                         }
                         recreate = true
                     }
+
                     if (recreate) {
                         postEvent(EventBus.RECREATE, "")
                     } else if (notifyMain) {

@@ -29,6 +29,7 @@ import splitties.views.onLongClick
 import androidx.core.graphics.drawable.toDrawable
 import androidx.transition.TransitionManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import io.legato.kazusa.help.config.ThemeConfig
 
 class ReadStyleDialog : BaseBottomSheetDialogFragment(R.layout.dialog_read_book_style),
     FontSelectDialog.CallBack {
@@ -38,21 +39,6 @@ class ReadStyleDialog : BaseBottomSheetDialogFragment(R.layout.dialog_read_book_
     private lateinit var styleAdapter: StyleAdapter
 
     private lateinit var allSliders: List<DetailSeekBar>
-
-
-    override fun onStart() {
-        super.onStart()
-//        dialog?.window?.run {
-//            clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-//            setBackgroundDrawableResource(R.color.background)
-//            decorView.setPadding(0, 0, 0, 0)
-//            val attr = attributes
-//            attr.dimAmount = 0.0f
-//            attr.gravity = Gravity.BOTTOM
-//            attributes = attr
-//            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-//        }
-    }
 
     override fun onFragmentCreated(view: View, savedInstanceState: Bundle?) {
         (activity as ReadBookActivity).bottomDialog++
@@ -75,6 +61,11 @@ class ReadStyleDialog : BaseBottomSheetDialogFragment(R.layout.dialog_read_book_
 //        tvPageAnim.setTextColor(textColor)
 //        tvBgTs.setTextColor(textColor)
 //        tvShareLayout.setTextColor(textColor)
+        if (AppConfig.isNightTheme) {
+            tvDayNight.setIconResource(R.drawable.ic_daytime)
+        } else {
+            tvDayNight.setIconResource(R.drawable.ic_brightness)
+        }
         dsbTextSize.valueFormat = {
             (it + 5).toString()
         }
@@ -132,6 +123,13 @@ class ReadStyleDialog : BaseBottomSheetDialogFragment(R.layout.dialog_read_book_
         }
         tvTip.setOnClickListener {
             TipConfigDialog().show(childFragmentManager, "tipConfigDialog")
+        }
+        tvMore.setOnClickListener {
+            showDialogFragment<MoreConfigDialog>()
+        }
+        tvDayNight.setOnClickListener {
+            AppConfig.isNightTheme = !AppConfig.isNightTheme
+            ThemeConfig.applyDayNight(requireContext())
         }
 //        rgPageAnim.setOnCheckedChangeListener { _, checkedId ->
 //            ReadBook.book?.setPageAnim(-1)
@@ -299,6 +297,5 @@ class ReadStyleDialog : BaseBottomSheetDialogFragment(R.layout.dialog_read_book_
                 }
             }
         }
-
     }
 }

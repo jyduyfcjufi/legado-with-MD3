@@ -46,7 +46,7 @@ class ServerConfigDialog() : BaseDialogFragment(R.layout.dialog_webdav_server, t
     override fun onFragmentCreated(view: View, savedInstanceState: Bundle?) {
         //inding.toolBar.setBackgroundColor(primaryColor)
         binding.toolBar.inflateMenu(R.menu.server_config)
-        binding.toolBar.menu.applyTint(requireContext())
+        //binding.toolBar.menu.applyTint(requireContext())
         binding.toolBar.setOnMenuItemClickListener(this)
         viewModel.init(arguments?.getLong("id")) {
             upConfigView(viewModel.mServer)

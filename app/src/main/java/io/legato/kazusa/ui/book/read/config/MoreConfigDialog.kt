@@ -10,6 +10,7 @@ import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import io.legato.kazusa.R
 import io.legato.kazusa.base.BasePrefDialogFragment
 import io.legato.kazusa.constant.EventBus
@@ -30,20 +31,6 @@ import io.legato.kazusa.utils.removePref
 
 class MoreConfigDialog : BasePrefDialogFragment() {
     private val readPreferTag = "readPreferenceFragment"
-
-    override fun onStart() {
-        super.onStart()
-//        dialog?.window?.run {
-//            clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-//            setBackgroundDrawableResource(R.color.background)
-//            decorView.setPadding(0, 0, 0, 0)
-//            val attr = attributes
-//            attr.dimAmount = 0.0f
-//            attr.gravity = Gravity.BOTTOM
-//            attributes = attr
-//            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, 360.dpToPx())
-//        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,12 +54,7 @@ class MoreConfigDialog : BasePrefDialogFragment() {
             .commit()
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        (activity as ReadBookActivity).bottomDialog--
-    }
-
-    class ReadPreferenceFragment : PreferenceFragment(),
+    class ReadPreferenceFragment : PreferenceFragmentCompat(),
         SharedPreferences.OnSharedPreferenceChangeListener {
 
         private val slopSquare by lazy { ViewConfiguration.get(requireContext()).scaledTouchSlop }
@@ -198,6 +180,5 @@ class MoreConfigDialog : BasePrefDialogFragment() {
                     getString(R.string.page_touch_slop_summary, value)
             }
         }
-
     }
 }

@@ -26,7 +26,7 @@ import io.legato.kazusa.ui.widget.dialog.TextDialog
 inline fun <reified T : DialogFragment> Fragment.showDialogFragment(
     arguments: Bundle.() -> Unit = {}
 ) {
-    val dialog = T::class.java.newInstance()
+    val dialog = T::class.java.getDeclaredConstructor().newInstance()
     val bundle = Bundle()
     bundle.apply(arguments)
     dialog.arguments = bundle

@@ -66,7 +66,7 @@ class GroupSelectDialog() : BaseBottomSheetDialogFragment(R.layout.dialog_book_g
     private fun initView() {
         binding.toolBar.title = getString(R.string.group_select)
         binding.toolBar.inflateMenu(R.menu.book_group_manage)
-        binding.toolBar.menu.applyTint(requireContext())
+        //binding.toolBar.menu.applyTint(requireContext())
         binding.toolBar.setOnMenuItemClickListener(this)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.addItemDecoration(VerticalDivider(requireContext()))

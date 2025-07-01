@@ -31,6 +31,7 @@ import io.legato.kazusa.lib.dialogs.alert
 //import io.legado.app.lib.theme.primaryColor
 //import io.legado.app.lib.theme.primaryTextColor
 import io.legato.kazusa.model.ReadBook
+import io.legato.kazusa.ui.book.read.config.MoreConfigDialog
 import io.legato.kazusa.ui.browser.WebViewActivity
 import io.legato.kazusa.ui.widget.seekbar.SeekBarChangeListener
 import io.legato.kazusa.utils.ConstraintModify
@@ -44,6 +45,7 @@ import io.legato.kazusa.utils.loadAnimation
 import io.legato.kazusa.utils.modifyBegin
 import io.legato.kazusa.utils.openUrl
 import io.legato.kazusa.utils.putPrefBoolean
+import io.legato.kazusa.utils.showDialogFragment
 import io.legato.kazusa.utils.startActivity
 import io.legato.kazusa.utils.visible
 import splitties.views.onClick
@@ -159,11 +161,11 @@ class ReadMenu @JvmOverloads constructor(
     }
 
     private fun initView(reset: Boolean = false) = binding.run {
-        if (AppConfig.isNightTheme) {
-            fabNightTheme.setImageResource(R.drawable.ic_daytime)
-        } else {
-            fabNightTheme.setImageResource(R.drawable.ic_brightness)
-        }
+//        if (AppConfig.isNightTheme) {
+//            fabNightTheme.setIconResource(R.drawable.ic_daytime)
+//        } else {
+//            fabNightTheme.setIconResource(R.drawable.ic_brightness)
+//        }
         initAnimation()
         if (immersiveMenu) {
 //            val lightTextColor = ColorUtils.withAlpha(ColorUtils.lightenColor(textColor), 0.75f)
@@ -223,7 +225,7 @@ class ReadMenu @JvmOverloads constructor(
         /**
          * 确保视图不被导航栏遮挡
          */
-        applyNavigationBarPadding()
+        binding.bottomView.applyNavigationBarPadding()
     }
 
     fun reset() {
@@ -361,8 +363,6 @@ class ReadMenu @JvmOverloads constructor(
         }
         tvChapterName.setOnClickListener(chapterViewClickListener)
         tvChapterName.setOnLongClickListener(chapterViewLongClickListener)
-        tvChapterUrl.setOnClickListener(chapterViewClickListener)
-        tvChapterUrl.setOnLongClickListener(chapterViewLongClickListener)
         //书源操作
         tvSourceAction.onClick {
             sourceMenu.menu.findItem(R.id.menu_login).isVisible =
@@ -446,13 +446,13 @@ class ReadMenu @JvmOverloads constructor(
         }
 
         //替换
-        fabReplaceRule.setOnClickListener { callBack.openReplaceRule() }
+        //fabReplaceRule.setOnClickListener { callBack.openReplaceRule() }
 
         //夜间模式
-        fabNightTheme.setOnClickListener {
-            AppConfig.isNightTheme = !AppConfig.isNightTheme
-            ThemeConfig.applyDayNight(context)
-        }
+//        fabNightTheme.setOnClickListener {
+//            AppConfig.isNightTheme = !AppConfig.isNightTheme
+//            ThemeConfig.applyDayNight(context)
+//        }
 
         //上一章
         tvPre.setOnClickListener { ReadBook.moveToPrevChapter(upContent = true, toLast = false) }
@@ -461,35 +461,29 @@ class ReadMenu @JvmOverloads constructor(
         tvNext.setOnClickListener { ReadBook.moveToNextChapter(true) }
 
         //目录
-        llCatalog.setOnClickListener {
+        ivCatalog.setOnClickListener {
             runMenuOut {
                 callBack.openChapterList()
             }
         }
 
         //朗读
-        llReadAloud.setOnClickListener {
+        ivReadAloud.setOnClickListener {
             runMenuOut {
                 callBack.onClickReadAloud()
             }
         }
-        llReadAloud.onLongClick {
+
+        ivReadAloud.onLongClick {
             runMenuOut {
                 callBack.showReadAloudDialog()
             }
         }
 
-        //界面
-        llFont.setOnClickListener {
+        //设置
+        ivSetting.setOnClickListener {
             runMenuOut {
                 callBack.showReadStyle()
-            }
-        }
-
-        //设置
-        llSetting.setOnClickListener {
-            runMenuOut {
-                callBack.showMoreSetting()
             }
         }
     }
@@ -500,13 +494,13 @@ class ReadMenu @JvmOverloads constructor(
     }
 
     fun upBookView() {
-        binding.titleBar.title = ReadBook.book?.name
+        binding.titleBar.title = " "
+        binding.tvBookName.text = ReadBook.book?.name
         ReadBook.curTextChapter?.let {
             binding.tvChapterName.text = it.title
-            binding.tvChapterName.visible()
             if (!ReadBook.isLocalBook) {
                 binding.tvChapterUrl.text = it.chapter.getAbsoluteURL()
-                binding.tvChapterUrl.visible()
+                //binding.tvChapterUrl.visible()
             } else {
                 binding.tvChapterUrl.gone()
             }
@@ -514,7 +508,6 @@ class ReadMenu @JvmOverloads constructor(
             binding.tvPre.isEnabled = ReadBook.durChapterIndex != 0
             binding.tvNext.isEnabled = ReadBook.durChapterIndex != ReadBook.simulatedChapterSize - 1
         } ?: let {
-            binding.tvChapterName.gone()
             binding.tvChapterUrl.gone()
         }
     }
@@ -526,20 +519,16 @@ class ReadMenu @JvmOverloads constructor(
             when (AppConfig.progressBarBehavior) {
                 "page" -> {
                     ReadBook.curTextChapter?.let { chapter ->
-                        if (chapter.pageSize > 0 && ReadBook.durPageIndex > 0) {
+                        if (chapter.pageSize >= 0 && ReadBook.durPageIndex >= 0) {
                             valueFrom = 1f
                             valueTo = chapter.pageSize.toFloat().coerceAtLeast(2f)
-                            value = (ReadBook.durPageIndex).coerceIn(1, chapter.pageSize).toFloat()
                             stepSize = 1f
+                            value = (ReadBook.durPageIndex).coerceIn(1, chapter.pageSize).toFloat()
                         } else {
-                            valueFrom = 1f
-                            valueTo = 2f
-                            value = 1f
+                            value = 0f
+                            valueFrom = 0f
+                            valueTo = 1000f
                         }
-                    }?: run {
-                        valueFrom = 1f
-                        valueTo = 2f
-                        value = 1f
                     }
                 }
 
@@ -548,12 +537,12 @@ class ReadMenu @JvmOverloads constructor(
                     {
                         valueFrom = 1f
                         valueTo = ReadBook.simulatedChapterSize.toFloat().coerceAtLeast(2f)
-                        value = (ReadBook.durChapterIndex).coerceIn(1, ReadBook.simulatedChapterSize).toFloat()
                         stepSize = 1f
+                        value = (ReadBook.durChapterIndex).coerceIn(1, ReadBook.simulatedChapterSize).toFloat()
                     } else {
-                        valueFrom = 1f
-                        valueTo = 2f
-                        value = 1f
+                        valueFrom = 0f
+                        value = 0f
+                        valueTo = 1000f
                     }
                 }
             }
@@ -579,15 +568,15 @@ class ReadMenu @JvmOverloads constructor(
 //    }
 
     fun setSeekPage(seek: Int) {
-        binding.seekReadPage.value = 1f
+        binding.seekReadPage.value = seek.toFloat() + 1
     }
 
     fun setAutoPage(autoPage: Boolean) = binding.run {
         if (autoPage) {
-            fabAutoPage.setImageResource(R.drawable.ic_auto_page_stop)
+            fabAutoPage.setIconResource(R.drawable.ic_auto_page_stop)
             fabAutoPage.contentDescription = context.getString(R.string.auto_next_page_stop)
         } else {
-            fabAutoPage.setImageResource(R.drawable.ic_auto_page)
+            fabAutoPage.setIconResource(R.drawable.ic_auto_page)
             fabAutoPage.contentDescription = context.getString(R.string.auto_next_page)
         }
         //fabAutoPage.setColorFilter(textColor)
@@ -615,7 +604,6 @@ class ReadMenu @JvmOverloads constructor(
         fun openSourceEditActivity()
         fun openBookInfoActivity()
         fun showReadStyle()
-        fun showMoreSetting()
         fun showReadAloudDialog()
         fun upSystemUiVisibility()
         fun onClickReadAloud()

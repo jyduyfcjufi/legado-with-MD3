@@ -79,7 +79,7 @@ class VerificationCodeDialog() : BaseDialogFragment(R.layout.dialog_verification
     private fun initMenu() {
         binding.toolBar.setOnMenuItemClickListener(this)
         binding.toolBar.inflateMenu(R.menu.verification_code)
-        binding.toolBar.menu.applyTint(requireContext())
+        //binding.toolBar.menu.applyTint(requireContext())
     }
 
     @SuppressLint("CheckResult")

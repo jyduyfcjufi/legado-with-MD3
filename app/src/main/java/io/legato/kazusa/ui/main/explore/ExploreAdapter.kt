@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.google.android.flexbox.FlexboxLayout
+import com.google.android.material.card.MaterialCardView
 import io.legato.kazusa.R
 import io.legato.kazusa.base.adapter.ItemViewHolder
 import io.legato.kazusa.base.adapter.RecyclerAdapter
@@ -85,14 +86,17 @@ class ExploreAdapter(context: Context, val callBack: CallBack) :
             recyclerFlexbox(flexbox)
             flexbox.visible()
             kinds.forEach { kind ->
-                val tv = getFlexboxChild(flexbox)
-                flexbox.addView(tv)
-                tv.text = kind.title
-                kind.style().apply(tv)
+                val cardView = getFlexboxChild(flexbox)
+                val textView = cardView.findViewById<TextView>(R.id.text_view)
+                flexbox.addView(cardView)
+
+                textView.text = kind.title
+                //kind.style().apply(textView)
+
                 if (kind.url.isNullOrBlank()) {
-                    tv.setOnClickListener(null)
+                    cardView.setOnClickListener(null)
                 } else {
-                    tv.setOnClickListener {
+                    cardView.setOnClickListener {
                         if (kind.title.startsWith("ERROR:")) {
                             it.activity?.showDialogFragment(TextDialog("ERROR", kind.url))
                         } else {
@@ -104,12 +108,13 @@ class ExploreAdapter(context: Context, val callBack: CallBack) :
         }
     }
 
+
     @Synchronized
-    private fun getFlexboxChild(flexbox: FlexboxLayout): TextView {
+    private fun getFlexboxChild(flexbox: FlexboxLayout): MaterialCardView {
         return if (recycler.isEmpty()) {
             ItemFilletTextBinding.inflate(inflater, flexbox, false).root
         } else {
-            recycler.removeLastElement() as TextView
+            recycler.removeLastElement() as MaterialCardView
         }
     }
 

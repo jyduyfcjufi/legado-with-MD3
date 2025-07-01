@@ -22,18 +22,6 @@ private constructor(private val mContext: Context) : ThemeStoreInterface {
 
     private val mEditor = prefs(mContext).edit()
 
-//    override fun enableDynamicColors(context: Context, enable: Boolean): ThemeStore {
-//        mEditor.putBoolean(ThemeStorePrefKeys.KEY_DYNAMIC_COLORS_ENABLED, enable)
-//        if (enable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            // 使用系统动态颜色
-//            val dynamicColors = DynamicColorsOptions.Builder()
-//                .setThemeOverlay(R.style.Theme_App_Dynamic)
-//                .build()
-//            DynamicColors.applyToActivitiesIfAvailable(context.applicationContext, dynamicColors)
-//        }
-//        return this
-//    }
-
     override fun primaryColor(@ColorInt color: Int): ThemeStore {
         mEditor.putInt(ThemeStorePrefKeys.KEY_PRIMARY_COLOR, color)
         if (autoGeneratePrimaryDark(mContext))

@@ -47,7 +47,7 @@ class GroupManageDialog : BaseBottomSheetDialogFragment(R.layout.dialog_recycler
         //toolBar.setBackgroundColor(primaryColor)
         toolBar.title = getString(R.string.group_manage)
         toolBar.inflateMenu(R.menu.group_manage)
-        toolBar.menu.applyTint(requireContext())
+        //toolBar.menu.applyTint(requireContext())
         toolBar.setOnMenuItemClickListener(this@GroupManageDialog)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.addItemDecoration(VerticalDivider(requireContext()))

@@ -59,7 +59,7 @@ class ChangeCoverDialog() : BaseDialogFragment(R.layout.dialog_change_cover),
 
     private fun initMenu() {
         binding.toolBar.inflateMenu(R.menu.change_cover)
-        binding.toolBar.menu.applyTint(requireContext())
+        //binding.toolBar.menu.applyTint(requireContext())
         binding.toolBar.setOnMenuItemClickListener(this)
     }
 
@@ -94,7 +94,7 @@ class ChangeCoverDialog() : BaseDialogFragment(R.layout.dialog_change_cover),
                     item.setTitle(R.string.refresh)
                 }
             }
-            binding.toolBar.menu.applyTint(requireContext())
+            //binding.toolBar.menu.applyTint(requireContext())
         }
 
     }

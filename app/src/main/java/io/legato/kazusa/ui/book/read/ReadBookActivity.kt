@@ -34,6 +34,7 @@ import io.legato.kazusa.data.entities.Book
 import io.legato.kazusa.data.entities.BookChapter
 import io.legato.kazusa.data.entities.BookProgress
 import io.legato.kazusa.data.entities.BookSource
+import io.legato.kazusa.data.entities.ReplaceRule
 import io.legato.kazusa.exception.NoStackTraceException
 import io.legato.kazusa.help.AppWebDav
 import io.legato.kazusa.help.IntentData
@@ -508,6 +509,7 @@ class ReadBookActivity : BaseReadBookActivity(),
                 }
             }
 
+            R.id.menu_setting_replace -> openReplaceRule()
             R.id.menu_download -> showDownloadDialog()
             R.id.menu_add_bookmark -> addBookmark()
             R.id.menu_simulated_reading -> showSimulatedReading()
@@ -1203,19 +1205,23 @@ class ReadBookActivity : BaseReadBookActivity(),
     /**
      * 显示阅读样式配置
      */
-    override fun showReadStyle() {
+//    override fun showReadStyle() {
+//        showDialogFragment<ReadStyleDialog>()
+//    }
+//
+//    /**
+//     * 显示更多设置
+//     */
+//    override fun showMoreSetting() {
+//        showDialogFragment<MoreConfigDialog>()
+//    }
+//
+    override fun showSearchSetting() {
         showDialogFragment<ReadStyleDialog>()
     }
 
-    /**
-     * 显示更多设置
-     */
-    override fun showMoreSetting() {
-        showDialogFragment<MoreConfigDialog>()
-    }
-
-    override fun showSearchSetting() {
-        showDialogFragment<MoreConfigDialog>()
+    override fun showReadStyle() {
+        showDialogFragment<ReadStyleDialog>()
     }
 
     /**

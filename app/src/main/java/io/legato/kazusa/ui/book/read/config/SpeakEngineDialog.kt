@@ -161,7 +161,7 @@ class SpeakEngineDialog() : BaseBottomSheetDialogFragment(R.layout.dialog_recycl
 
     private fun initMenu() = binding.run {
         toolBar.inflateMenu(R.menu.speak_engine)
-        toolBar.menu.applyTint(requireContext())
+        //toolBar.menu.applyTint(requireContext())
         toolBar.setOnMenuItemClickListener(this@SpeakEngineDialog)
     }
 

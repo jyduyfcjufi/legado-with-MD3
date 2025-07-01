@@ -290,7 +290,7 @@ class FastScroller : LinearLayout {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                if (event.x < mHandleView.x - ViewCompat.getPaddingStart(mHandleView)) {
+                if (event.x < mHandleView.x - mHandleView.paddingStart) {
                     return false
                 }
                 if (!mScrollbar.isVisible) {

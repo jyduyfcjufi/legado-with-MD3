@@ -418,6 +418,13 @@ val Context.isDebuggable: Boolean
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 
+val Context.bookshelfLayout: Int
+    get() = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        AppConfig.bookshelfLayoutLandscape
+    } else {
+        AppConfig.bookshelfLayoutPortrait
+    }
+
 fun Context.themeColor(attr: Int): Int {
     val typedValue = TypedValue()
     theme.resolveAttribute(attr, typedValue, true)

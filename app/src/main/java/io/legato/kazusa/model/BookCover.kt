@@ -78,6 +78,7 @@ object BookCover {
         }.getOrDefault(appCtx.resources.getDrawable(R.drawable.image_cover_default, null))
     }
 
+
     /**
      * 加载封面
      */
@@ -126,6 +127,8 @@ object BookCover {
             .error(defaultDrawable)
             .centerCrop()
     }
+
+
 
     /**
      * 加载漫画图片

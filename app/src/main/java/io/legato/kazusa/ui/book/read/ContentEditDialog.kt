@@ -78,7 +78,7 @@ class ContentEditDialog : BaseDialogFragment(R.layout.dialog_content_edit) {
 
     private fun initMenu() {
         binding.toolBar.inflateMenu(R.menu.content_edit)
-        binding.toolBar.menu.applyTint(requireContext())
+        //binding.toolBar.menu.applyTint(requireContext())
         binding.toolBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_save -> {

@@ -9,6 +9,7 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.legato.kazusa.R
+import io.legato.kazusa.base.BaseBottomSheetDialogFragment
 import io.legato.kazusa.base.BaseDialogFragment
 import io.legato.kazusa.constant.AppLog
 import io.legato.kazusa.constant.PreferKey
@@ -36,11 +37,12 @@ import io.legato.kazusa.utils.toastOnUi
 import io.legato.kazusa.utils.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.launch
 import java.io.File
+import androidx.core.net.toUri
 
 /**
  * 字体选择对话框
  */
-class FontSelectDialog : BaseDialogFragment(R.layout.dialog_font_select),
+class FontSelectDialog : BaseBottomSheetDialogFragment(R.layout.dialog_font_select),
     Toolbar.OnMenuItemClickListener,
     FontAdapter.CallBack {
     private val fontRegex = Regex("(?i).*\\.[ot]tf")
@@ -70,11 +72,6 @@ class FontSelectDialog : BaseDialogFragment(R.layout.dialog_font_select),
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        setLayout(0.9f, 0.9f)
-    }
-
     override fun onFragmentCreated(view: View, savedInstanceState: Bundle?) {
         //binding.toolBar.setBackgroundColor(primaryColor)
         binding.toolBar.setTitle(R.string.select_font)
@@ -89,7 +86,7 @@ class FontSelectDialog : BaseDialogFragment(R.layout.dialog_font_select),
             openFolder()
         } else {
             if (fontPath.isContentScheme()) {
-                val doc = DocumentFile.fromTreeUri(requireContext(), Uri.parse(fontPath))
+                val doc = DocumentFile.fromTreeUri(requireContext(), fontPath.toUri())
                 if (doc?.canRead() == true) {
                     loadFontFiles(FileDoc.fromDocumentFile(doc))
                 } else {

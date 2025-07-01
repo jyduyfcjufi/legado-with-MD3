@@ -2,12 +2,14 @@
 
 package io.legato.kazusa.ui.main
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
@@ -57,7 +59,10 @@ import splitties.views.bottomPadding
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import androidx.core.view.get
+import com.google.android.material.navigation.NavigationBarView
 import io.legato.kazusa.ui.welcome.WelcomeActivity
+import io.legato.kazusa.utils.applyNavigationBarPadding
+import io.legato.kazusa.utils.applyStatusBarPadding
 
 /**
  * 主界面
@@ -84,9 +89,11 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
     private val adapter by lazy {
         TabFragmentPageAdapter(supportFragmentManager)
     }
-    private val onUpBooksBadgeView by lazy {
-        binding.bottomNavigationView.addBadgeView(0)
+
+    private val badge by lazy {
+        getNavigationBarView().getOrCreateBadge(R.id.menu_bookshelf)
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         upBottomMenu()
@@ -197,13 +204,18 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
         viewPagerMain.adapter = adapter
         viewPagerMain.addOnPageChangeListener(PageChangeCallback())
         //bottomNavigationView.elevation = elevation
-        bottomNavigationView.setOnNavigationItemSelectedListener(this@MainActivity)
-        bottomNavigationView.setOnNavigationItemReselectedListener(this@MainActivity)
-        bottomNavigationView.setOnApplyWindowInsetsListenerCompat { view, windowInsets ->
-            val height = windowInsets.navigationBarHeight
-            view.bottomPadding = height
-            windowInsets.inset(0, 0, 0, height)
+        getNavigationBarView().apply {
+            setOnItemSelectedListener { onNavigationItemSelected(it) }
+            setOnItemReselectedListener { onNavigationItemReselected(it) }
         }
+
+        //getNavigationBarView().applyNavigationBarPadding()
+
+//        bottomNavigationView.setOnApplyWindowInsetsListenerCompat { view, windowInsets ->
+//            val height = windowInsets.navigationBarHeight
+//            view.bottomPadding = height
+//            windowInsets.inset(0, 0, 0, height)
+//        }
     }
 
     /**
@@ -344,8 +356,10 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
     override fun observeLiveBus() {
         super.observeLiveBus()
         viewModel.onUpBooksLiveData.observe(this) {
-            onUpBooksBadgeView.setBadgeCount(it)
+            badge.isVisible = it > 0
+            badge.number = it
         }
+
         observeEvent<Boolean>(EventBus.NOTIFY_MAIN) {
             binding.apply {
                 upBottomMenu()
@@ -359,13 +373,24 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
         }
     }
 
+    private fun getNavigationBarView(): NavigationBarView {
+        return findViewById(
+            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+                R.id.bottom_navigation_view
+            else
+                R.id.navigation_rail_view
+        )
+    }
+
+
     private fun upBottomMenu() {
+
         val showDiscovery = AppConfig.showDiscovery
         val showRss = AppConfig.showRSS
-        binding.bottomNavigationView.menu.let { menu ->
-            menu.findItem(R.id.menu_discovery).isVisible = showDiscovery
-            menu.findItem(R.id.menu_rss).isVisible = showRss
-        }
+        val menu = getNavigationBarView().menu
+        menu.findItem(R.id.menu_discovery).isVisible = showDiscovery
+        menu.findItem(R.id.menu_rss).isVisible = showRss
+
         var index = 0
         if (showDiscovery) {
             index++
@@ -408,8 +433,9 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
 
         override fun onPageSelected(position: Int) {
             pagePosition = position
-            binding.bottomNavigationView.menu[realPositions[position]].isChecked = true
+            getNavigationBarView().menu[realPositions[position]].isChecked = true
         }
+
     }
 
 

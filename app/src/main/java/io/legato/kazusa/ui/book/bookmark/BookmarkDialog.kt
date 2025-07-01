@@ -40,14 +40,14 @@ class BookmarkDialog() : BaseBottomSheetDialogFragment(R.layout.dialog_bookmark)
             return
         }
 
-        //@Suppress("DEPRECATION")
+        @Suppress("DEPRECATION")
         val bookmark = arguments.getParcelable<Bookmark>("bookmark")
         bookmark ?: let {
             dismiss()
             return
         }
         val editPos = arguments.getInt("editPos", -1)
-        binding.btnDelete.visible(editPos >= 0) // 替换 tvFooterLeft
+        binding.btnDelete.visible(editPos >= 0)
 
         binding.run {
             tvChapterName.text = bookmark.chapterName

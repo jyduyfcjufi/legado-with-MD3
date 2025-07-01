@@ -7,9 +7,10 @@
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:padding="16dp">
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp">
 
-    <io.legato.kazusa.lib.theme.view.ThemeCheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/cb_source"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -21,13 +22,13 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
 
-    <io.legato.kazusa.lib.theme.view.ThemeSwitch
+    <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/swt_enabled"
         android:name="@string/enable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@id/title_example"
         app:layout_constraintRight_toLeftOf="@id/iv_edit"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,12 +36,12 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_edit"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_gravity="center"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/edit"
-        android:padding="6dp"
+        android:layout_marginEnd="8dp"
         android:src="@drawable/ic_edit"
         app:layout_constraintBottom_toTopOf="@id/title_example"
         app:layout_constraintRight_toLeftOf="@id/iv_menu_more"
@@ -48,11 +49,11 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_menu_more"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/more_menu"
-        android:padding="6dp"
+        android:layout_marginEnd="8dp"
         android:src="@drawable/ic_more_vert"
         app:layout_constraintBottom_toTopOf="@id/title_example"
         app:layout_constraintRight_toRightOf="parent"

@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.legato.kazusa.R
 import io.legato.kazusa.constant.AppLog
 import io.legato.kazusa.exception.NoStackTraceException
@@ -195,7 +196,7 @@ class PermissionActivity : AppCompatActivity() {
             finish()
             return
         }
-        rationaleDialog = AlertDialog.Builder(this)
+        rationaleDialog = MaterialAlertDialogBuilder(this)
             .setTitle(R.string.dialog_title)
             .setMessage(rationale)
             .setPositiveButton(R.string.dialog_setting) { _, _ ->

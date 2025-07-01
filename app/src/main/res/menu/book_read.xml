@@ -89,6 +89,16 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/menu_setting_replace"
+        android:title="@string/replace_rule_title_setting"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_effective_replaces"
+        android:title="@string/effective_replaces"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_same_title_removed"
         android:checkable="true"
         android:title="@string/same_title_removed"
@@ -135,11 +145,6 @@
     <item
         android:id="@+id/menu_update_toc"
         android:title="@string/update_toc"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu_effective_replaces"
-        android:title="@string/effective_replaces"
         app:showAsAction="never" />
 
     <item

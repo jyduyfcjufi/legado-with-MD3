@@ -37,10 +37,10 @@ abstract class BaseFragment(@LayoutRes layoutID: Int) : Fragment(layoutID) {
         onMultiWindowModeChanged()
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        onMultiWindowModeChanged()
-    }
+//    override fun onConfigurationChanged(newConfig: Configuration) {
+//        super.onConfigurationChanged(newConfig)
+//        onMultiWindowModeChanged()
+//    }
 
     private fun onMultiWindowModeChanged() {
 //        (activity as? BaseActivity<*>)?.let {

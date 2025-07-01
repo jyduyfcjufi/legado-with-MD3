@@ -167,12 +167,6 @@ class TitleBar @JvmOverloads constructor(
                 }
             }
 
-            if (AppConfig.isEInkMode) {
-                setBackgroundResource(R.drawable.bg_eink_border_bottom)
-            } else {
-                //setBackgroundColor(context.primaryColor)
-            }
-
             stateListAnimator = null
             //elevation = context.elevation
         }

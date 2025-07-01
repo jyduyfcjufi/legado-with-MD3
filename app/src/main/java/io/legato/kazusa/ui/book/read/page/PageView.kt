@@ -26,6 +26,7 @@ import io.legato.kazusa.utils.applyStatusBarPadding
 import io.legato.kazusa.utils.dpToPx
 import io.legato.kazusa.utils.gone
 import io.legato.kazusa.utils.setTextIfNotEqual
+import io.legato.kazusa.utils.statusBarHeight
 import splitties.views.backgroundColor
 import java.util.Date
 
@@ -59,11 +60,9 @@ class PageView(context: Context) : FrameLayout(context) {
         }
 
     init {
-        if (!isInEditMode) {
-            upStyle()
-            binding.vwStatusBar.applyStatusBarPadding()
-            binding.vwNavigationBar.applyNavigationBarPadding()
-        }
+        upStyle()
+        binding.vwStatusBar.applyStatusBarPadding()
+        binding.vwNavigationBar.applyNavigationBarPadding()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -118,8 +117,8 @@ class PageView(context: Context) : FrameLayout(context) {
      * 显示状态栏时隐藏header
      */
     fun upStatusBar() = with(binding.vwStatusBar) {
-//        setPadding(paddingLeft, context.statusBarHeight, paddingRight, paddingBottom)
-        isGone = ReadBookConfig.hideStatusBar || readBookActivity?.isInMultiWindow == true
+        setPadding(paddingLeft, context.statusBarHeight, paddingRight, paddingBottom)
+        isGone = ReadBookConfig.hideStatusBar
     }
 
     fun upNavigationBar() {

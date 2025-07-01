@@ -60,7 +60,7 @@ class SearchScopeDialog : BaseDialogFragment(R.layout.dialog_search_scope) {
 
     private fun initMenu() {
         binding.toolBar.inflateMenu(R.menu.book_search_scope)
-        binding.toolBar.menu.applyTint(requireContext())
+        //binding.toolBar.menu.applyTint(requireContext())
     }
 
     private fun initSearchView() {

@@ -86,7 +86,7 @@ class GroupManageDialog : BaseBottomSheetDialogFragment(R.layout.dialog_recycler
     private fun initMenu() {
         binding.toolBar.setOnMenuItemClickListener(this)
         binding.toolBar.inflateMenu(R.menu.book_group_manage)
-        binding.toolBar.menu.applyTint(requireContext())
+        //binding.toolBar.menu.applyTint(requireContext())
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {

@@ -2,19 +2,28 @@ package io.legato.kazusa.ui.book.info
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.RenderEffect
 import android.graphics.Shader
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.palette.graphics.Palette
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.color.utilities.Hct
+import com.google.android.material.color.utilities.SchemeTonalSpot
 import io.legato.kazusa.R
 import io.legato.kazusa.base.VMBaseActivity
 import io.legato.kazusa.constant.BookType
@@ -75,6 +84,7 @@ import io.legato.kazusa.utils.startActivity
 import io.legato.kazusa.utils.toastOnUi
 import io.legato.kazusa.utils.viewbindingdelegate.viewBinding
 import io.legato.kazusa.utils.visible
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -161,12 +171,10 @@ class BookInfoActivity :
 //        binding.llInfo.setBackgroundColor(backgroundColor)
 //        binding.flAction.setBackgroundColor(bottomBackground)
         //binding.flAction.applyNavigationBarPadding()
-        binding.btnShelf?.text = getString(R.string.remove_from_bookshelf)
+        binding.btnShelf.text = getString(R.string.remove_from_bookshelf)
         binding.tvToc.text = getString(R.string.toc_s, getString(R.string.loading))
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            binding.tvDetail?.let { it.revealOnFocusHint = false }
-        }
+        binding.tvDetail.revealOnFocusHint = false
 
         viewModel.bookData.observe(this) { showBook(it) }
         viewModel.chapterListData.observe(this) { upLoading(false, it) }
@@ -340,8 +348,8 @@ class BookInfoActivity :
         tvAuthor.text = getString(R.string.author_show, book.getRealAuthor())
         tvOrigin.text = getString(R.string.origin_show, book.originName)
         tvLasted.text = getString(R.string.lasted_show, book.latestChapterTitle)
-        tvDetail?.let { it.text = book.getDisplayIntro() }
-        llToc?.visible(!book.isWebFile)
+        tvDetail.let { it.text = book.getDisplayIntro() }
+        llToc.visible(!book.isWebFile)
         upTvBookshelf()
         upKinds(book)
         upGroup(book.group)
@@ -412,10 +420,10 @@ class BookInfoActivity :
     }
 
     private fun upTvBookshelf() {
-        binding.btnShelf?.apply {
+        binding.btnShelf.apply {
             if (viewModel.inBookshelf) {
                 text = getString(R.string.remove_from_bookshelf)
-                icon = ContextCompat.getDrawable(context, R.drawable.ic_clear_all)
+                icon = ContextCompat.getDrawable(context, R.drawable.ic_star_fill)
             } else {
                 text = getString(R.string.add_to_bookshelf)
                 icon = ContextCompat.getDrawable(context, R.drawable.ic_star)
@@ -427,13 +435,15 @@ class BookInfoActivity :
     private fun upGroup(groupId: Long) {
         viewModel.loadGroup(groupId) {
             if (it.isNullOrEmpty()) {
-                binding.tvGroup.text = if (book?.isLocal == true) {
-                    getString(R.string.group_s, getString(R.string.local_no_group))
+                binding.tvChangeGroup.text = if (book?.isLocal == true) {
+                    getString(R.string.local_no_group)
                 } else {
-                    getString(R.string.group_s, getString(R.string.no_group))
+                    getString(R.string.no_group)
                 }
+                binding.tvChangeGroup.setIconResource(R.drawable.ic_groups)
             } else {
-                binding.tvGroup.text = getString(R.string.group_s, it)
+                binding.tvChangeGroup.text = getString(R.string.group_s, it)
+                binding.tvChangeGroup.setIconResource(R.drawable.ic_groups_fill)
             }
         }
     }
@@ -452,7 +462,7 @@ class BookInfoActivity :
             }
             true
         }
-        btnRead?.setOnClickListener {
+        btnRead.setOnClickListener {
             viewModel.getBook()?.let { book ->
                 if (book.isWebFile) {
                     showWebFileDownloadAlert {
@@ -463,7 +473,7 @@ class BookInfoActivity :
                 }
             }
         }
-        btnShelf?.setOnClickListener {
+        btnShelf.setOnClickListener {
             viewModel.getBook()?.let { book ->
                 if (viewModel.inBookshelf) {
                     deleteBook()
@@ -490,7 +500,7 @@ class BookInfoActivity :
                 }
             }
         }
-        btnChangeSource?.setOnClickListener {
+        btnChangeSource.setOnClickListener {
             viewModel.getBook()?.let { book ->
                 showDialogFragment(ChangeBookSourceDialog(book.name, book.author))
             }
@@ -533,7 +543,7 @@ class BookInfoActivity :
                 }
             }
         }
-        refreshLayout?.setOnRefreshListener {
+        refreshLayout.setOnRefreshListener {
             refreshLayout.isRefreshing = false
             refreshBook()
         }
@@ -782,6 +792,18 @@ class BookInfoActivity :
         } else {
             waitDialog.dismiss()
         }
+    }
+
+    // 扩展函数：从Drawable中提取主色调
+    suspend fun Drawable.extractDominantColor(): Int = withContext(Dispatchers.Default) {
+        // 将Drawable转换为Bitmap
+        val bitmap = (this@extractDominantColor as? BitmapDrawable)?.bitmap ?: return@withContext Color.TRANSPARENT
+
+        // 生成Palette
+        val palette = Palette.from(bitmap).generate()
+
+        // 返回主色调，若未找到则使用默认值
+        palette.getDominantColor(Color.WHITE)
     }
 
 }

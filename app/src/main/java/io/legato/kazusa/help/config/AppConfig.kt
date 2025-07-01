@@ -159,11 +159,18 @@ object AppConfig : SharedPreferences.OnSharedPreferenceChangeListener {
             appCtx.putPrefInt(PreferKey.bookGroupStyle, value)
         }
 
-    var bookshelfLayout: Int
-        get() = appCtx.getPrefInt(PreferKey.bookshelfLayout, 0)
+    var bookshelfLayoutPortrait: Int
+        get() = appCtx.getPrefInt(PreferKey.bookshelfLayoutPortrait, 3)
         set(value) {
-            appCtx.putPrefInt(PreferKey.bookshelfLayout, value)
+            appCtx.putPrefInt(PreferKey.bookshelfLayoutPortrait, value)
         }
+
+    var bookshelfLayoutLandscape: Int
+        get() = appCtx.getPrefInt(PreferKey.bookshelfLayoutLandscape, 5)
+        set(value) {
+            appCtx.putPrefInt(PreferKey.bookshelfLayoutLandscape, value)
+        }
+
 
     var saveTabPosition: Int
         get() = appCtx.getPrefInt(PreferKey.saveTabPosition, 0)

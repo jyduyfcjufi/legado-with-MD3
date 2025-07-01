@@ -14,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.addCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
@@ -78,7 +79,7 @@ abstract class BaseActivity<VB : ViewBinding>(
         window.decorView.disableAutoFill()
         AppContextWrapper.applyLocaleAndFont(this)
         super.onCreate(savedInstanceState)
-
+        enableEdgeToEdge()
         //setupSystemBar()
         setContentView(binding.root)
         upBackgroundImage()
@@ -90,9 +91,9 @@ abstract class BaseActivity<VB : ViewBinding>(
         onActivityCreated(savedInstanceState)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration) {
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
+
 //        findViewById<TitleBar>(R.id.title_bar)
 //            ?.onMultiWindowModeChanged(isInMultiWindowMode, fullScreen)
         //setupSystemBar()

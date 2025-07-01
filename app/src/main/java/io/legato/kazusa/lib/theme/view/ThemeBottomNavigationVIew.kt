@@ -18,22 +18,6 @@ class ThemeBottomNavigationVIew(context: Context, attrs: AttributeSet) :
     BottomNavigationView(context, attrs) {
 
     init {
-//        val bgColor = context.bottomBackground
-//        setBackgroundColor(bgColor)
-//        val textIsDark = ColorUtils.isColorLight(bgColor)
-//        val textColor = context.getSecondaryTextColor(textIsDark)
-//
-//        val colorStateList = Selector.colorBuild()
-//            .setDefaultColor(textColor)
-//            .setSelectedColor(ThemeStore.accentColor(context)).create()
-//        itemIconTintList = colorStateList
-//        itemTextColor = colorStateList
-
-        if (AppConfig.isEInkMode) {
-            isItemHorizontalTranslationEnabled = false
-            itemBackground = Color.TRANSPARENT.toDrawable()
-        }
-
         ViewCompat.setOnApplyWindowInsetsListener(this, null)
     }
 

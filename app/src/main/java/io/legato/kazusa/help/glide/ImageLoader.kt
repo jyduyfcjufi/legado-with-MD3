@@ -14,6 +14,7 @@ import io.legato.kazusa.utils.isContentScheme
 import io.legato.kazusa.utils.isDataUrl
 import io.legato.kazusa.utils.lifecycle
 import java.io.File
+import androidx.core.net.toUri
 
 //https://bumptech.github.io/glide/doc/generatedapi.html
 //Instead of GlideApp, use com.bumptech.Glide
@@ -28,7 +29,7 @@ object ImageLoader {
             path.isNullOrEmpty() -> Glide.with(context).load(path)
             path.isDataUrl() -> Glide.with(context).load(path)
             path.isAbsUrl() -> Glide.with(context).load(path)
-            path.isContentScheme() -> Glide.with(context).load(Uri.parse(path))
+            path.isContentScheme() -> Glide.with(context).load(path.toUri())
             else -> kotlin.runCatching {
                 Glide.with(context).load(File(path))
             }.getOrElse {

@@ -1,6 +1,7 @@
 package io.legato.kazusa.ui.main.bookshelf.style1.books
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewConfiguration
@@ -27,6 +28,7 @@ import io.legato.kazusa.help.config.AppConfig
 //import io.legado.app.lib.theme.primaryColor
 import io.legato.kazusa.ui.book.info.BookInfoActivity
 import io.legato.kazusa.ui.main.MainViewModel
+import io.legato.kazusa.utils.bookshelfLayout
 import io.legato.kazusa.utils.cnCompare
 import io.legato.kazusa.utils.flowWithLifecycleAndDatabaseChangeFirst
 import io.legato.kazusa.utils.observeEvent
@@ -61,7 +63,10 @@ class BooksFragment() : BaseFragment(R.layout.fragment_books),
 
     private val binding by viewBinding(FragmentBooksBinding::bind)
     private val activityViewModel by activityViewModels<MainViewModel>()
-    private val bookshelfLayout by lazy { AppConfig.bookshelfLayout }
+
+    private val bookshelfLayout by lazy { requireContext().bookshelfLayout }
+
+
     private val booksAdapter: BaseBooksAdapter<*> by lazy {
         if (bookshelfLayout == 0) {
             BooksAdapterList(requireContext(), this, this, viewLifecycleOwner.lifecycle)
@@ -102,7 +107,7 @@ class BooksFragment() : BaseFragment(R.layout.fragment_books),
         if (bookshelfLayout == 0) {
             binding.rvBookshelf.layoutManager = LinearLayoutManager(context)
         } else {
-            binding.rvBookshelf.layoutManager = GridLayoutManager(context, bookshelfLayout + 2)
+            binding.rvBookshelf.layoutManager = GridLayoutManager(context, bookshelfLayout)
         }
         if (bookshelfLayout == 0) {
             binding.rvBookshelf.setRecycledViewPool(activityViewModel.booksListRecycledViewPool)
