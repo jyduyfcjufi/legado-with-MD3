@@ -3,9 +3,7 @@ package io.legato.kazusa.ui.widget
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Build
 import android.util.AttributeSet
-import androidx.annotation.RequiresApi
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.color.MaterialColors
@@ -19,8 +17,6 @@ class LabelsBar @JvmOverloads constructor(
     private val unUsedChips = arrayListOf<Chip>()
     private val usedChips = arrayListOf<Chip>()
 
-
-    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun setLabels(labels: List<String>) {
         clear()
         labels.forEach {
@@ -28,7 +24,6 @@ class LabelsBar @JvmOverloads constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun setLabels(labels: Array<String>) {
         setLabels(labels.toList())
     }

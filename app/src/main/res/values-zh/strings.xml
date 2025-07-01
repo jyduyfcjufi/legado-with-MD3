@@ -84,7 +84,7 @@
     <string name="origin_format">来源：%s</string>
     <string name="read_dur_progress">最近：%s</string>
     <string name="book_name">书名</string>
-    <string name="lasted_show">最新：%s</string>
+    <string name="lasted_show">最新 · %s</string>
     <string name="check_add_bookshelf">是否将《%s》放入书架？</string>
     <string name="import_books_count">共 %s 个文本文件</string>
     <string name="is_loading">加载中…</string>
@@ -590,7 +590,7 @@
     <string name="add_replace_rule">新建替换</string>
     <string name="group">分组</string>
     <string name="group_s">%s</string>
-    <string name="toc_s">已读：%s</string>
+    <string name="toc_s">在读 · %s</string>
     <string name="enable_explore">启用发现</string>
     <string name="disable_explore">禁用发现</string>
     <string name="enable_selection">启用所选</string>
@@ -686,7 +686,7 @@
     <string name="change_group">设置分组</string>
     <string name="view_toc">查看目录</string>
     <string name="bar_elevation">导航栏阴影</string>
-    <string name="bar_elevation_s">当前阴影大小（elevation）：%s</string>
+    <string name="bar_elevation_s">当前阴影大小（elevation）: %s</string>
     <string name="btn_default_s">默认</string>
     <string name="main_menu">主菜单</string>
     <string name="request_permission">点击授予权限</string>
@@ -802,7 +802,7 @@
     <string name="auto_clear_expired">自动清除过期搜索数据</string>
     <string name="auto_clear_expired_summary">超过一天的搜索数据</string>
     <string name="re_segment">重新分段</string>
-    <string name="style_name">样式名称：</string>
+    <string name="style_name">样式名称:</string>
     <string name="empty_msg_import_book">点击右上角文件夹图标，选择文件夹</string>
     <string name="scan_folder">智能扫描</string>
     <string name="import_file_name">导入文件名</string>
@@ -1218,4 +1218,7 @@
     <string name="hide_manga_title">隐藏漫画列表标题</string>
     <string name="refresh_explore">刷新发现</string>
     <string name="change_icon_success">图标已修改</string>
+    <string name="read_chapter_total">共 %d 章</string>
+    <string name="read_chapter_index">已读 %d 章</string>
+
 </resources>

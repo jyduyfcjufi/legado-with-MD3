@@ -2,7 +2,6 @@ package io.legato.kazusa.ui.book.info
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.RenderEffect
 import android.graphics.Shader
@@ -13,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,9 +19,6 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.palette.graphics.Palette
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.color.utilities.Hct
-import com.google.android.material.color.utilities.SchemeTonalSpot
 import io.legato.kazusa.R
 import io.legato.kazusa.base.VMBaseActivity
 import io.legato.kazusa.constant.BookType
@@ -46,10 +41,6 @@ import io.legato.kazusa.help.config.AppConfig
 import io.legato.kazusa.help.config.LocalConfig
 import io.legato.kazusa.lib.dialogs.alert
 import io.legato.kazusa.lib.dialogs.selector
-//import io.legado.app.lib.theme.accentColor
-//import io.legado.app.lib.theme.backgroundColor
-//import io.legado.app.lib.theme.bottomBackground
-//import io.legado.app.lib.theme.getPrimaryTextColor
 import io.legato.kazusa.model.BookCover
 import io.legato.kazusa.model.remote.RemoteBookWebDav
 import io.legato.kazusa.ui.about.AppLogDialog
@@ -348,8 +339,10 @@ class BookInfoActivity :
         tvAuthor.text = getString(R.string.author_show, book.getRealAuthor())
         tvOrigin.text = getString(R.string.origin_show, book.originName)
         tvLasted.text = getString(R.string.lasted_show, book.latestChapterTitle)
-        tvDetail.let { it.text = book.getDisplayIntro() }
-        llToc.visible(!book.isWebFile)
+        tvChapter.text = getString(R.string.read_chapter_total, book.totalChapterNum)
+        tvChapterIndex.text = getString(R.string.read_chapter_index, book.durChapterIndex)
+        tvDetail.text = book.getDisplayIntro()
+        tvToc.visible(!book.isWebFile)
         upTvBookshelf()
         upKinds(book)
         upGroup(book.group)
@@ -371,9 +364,7 @@ class BookInfoActivity :
                 lbKind.gone()
             } else {
                 lbKind.visible()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                    lbKind.setLabels(kinds)
-                }
+                lbKind.setLabels(kinds)
             }
         }
     }
