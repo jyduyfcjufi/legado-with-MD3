@@ -38,7 +38,8 @@ class RssFavoritesActivity : BaseActivity<ActivityRssFavoritesBinding>() {
     private var groupsMenu: SubMenu? = null
     private var currentGroup = ""
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initView()
         upFragments()
     }

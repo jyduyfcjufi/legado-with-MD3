@@ -46,7 +46,8 @@ class ReadRecordActivity : BaseActivity<ActivityReadRecordBinding>() {
 
     override val binding by viewBinding(ActivityReadRecordBinding::inflate)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initView()
         initAllTime()
         initData()

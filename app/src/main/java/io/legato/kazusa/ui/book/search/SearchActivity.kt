@@ -83,7 +83,8 @@ class SearchActivity : VMBaseActivity<ActivityBookSearchBinding, SearchViewModel
     private var precisionSearchMenuItem: MenuItem? = null
     private var isManualStopSearch = false
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         //binding.llInputHelp.setBackgroundColor(backgroundColor)
         initRecyclerView()
         initSearchView()

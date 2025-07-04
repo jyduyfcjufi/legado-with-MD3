@@ -12,7 +12,8 @@ class OpenUrlConfirmActivity :
 
     override val binding by viewBinding(ActivityTranslucenceBinding::inflate)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         intent.getStringExtra("uri")?.let {
             val mimeType = intent.getStringExtra("mimeType")
             val sourceOrigin = intent.getStringExtra("sourceOrigin")

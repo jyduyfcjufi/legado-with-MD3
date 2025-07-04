@@ -90,10 +90,7 @@ abstract class BaseReadBookActivity :
             }
             windowInsets
         }
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        //binding.navigationBar.setBackgroundColor(bottomBackground)
         viewModel.permissionDenialLiveData.observe(this) {
             selectBookFolderResult.launch {
                 mode = HandleFileContract.DIR_SYS

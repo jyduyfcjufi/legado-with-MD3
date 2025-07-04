@@ -145,7 +145,8 @@ class BookSourceActivity : VMBaseActivity<ActivityBookSourceBinding, BookSourceV
 
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initRecyclerView()
         initSearchView()
         upBookSource()

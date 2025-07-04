@@ -19,7 +19,8 @@ class OnLineImportActivity :
     override val binding by viewBinding(ActivityTranslucenceBinding::inflate)
     override val viewModel by viewModels<OnLineImportViewModel>()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.successLive.observe(this) {
             when (it.first) {
                 "bookSource" -> showDialogFragment(

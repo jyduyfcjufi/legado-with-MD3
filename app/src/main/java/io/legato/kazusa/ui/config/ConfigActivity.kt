@@ -15,7 +15,8 @@ class ConfigActivity : VMBaseActivity<ActivityConfigBinding, ConfigViewModel>() 
     override val binding by viewBinding(ActivityConfigBinding::inflate)
     override val viewModel by viewModels<ConfigViewModel>()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         when (val configTag = intent.getStringExtra("configTag")) {
             ConfigTag.OTHER_CONFIG -> replaceFragment<OtherConfigFragment>(configTag)
             ConfigTag.THEME_CONFIG -> replaceFragment<ThemeConfigFragment>(configTag)

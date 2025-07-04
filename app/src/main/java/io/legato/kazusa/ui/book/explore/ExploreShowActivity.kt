@@ -28,7 +28,8 @@ class ExploreShowActivity : VMBaseActivity<ActivityExploreShowBinding, ExploreSh
     private val adapter by lazy { ExploreShowAdapter(this, this) }
     private val loadMoreView by lazy { LoadMoreView(this) }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding.titleBar.title = intent.getStringExtra("exploreName")
         initRecyclerView()
         viewModel.booksData.observe(this) { upData(it) }

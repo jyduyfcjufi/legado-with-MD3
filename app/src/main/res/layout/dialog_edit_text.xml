@@ -4,13 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:overScrollMode="ifContentScrolls"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="16dp">
 
-    <io.legato.kazusa.ui.widget.text.AutoCompleteTextView
-        android:id="@+id/edit_view"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        android:layout_height="wrap_content">
+        <io.legato.kazusa.ui.widget.text.AutoCompleteTextView
+            android:id="@+id/edit_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
+            android:paddingHorizontal="16dp"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.core.widget.NestedScrollView>

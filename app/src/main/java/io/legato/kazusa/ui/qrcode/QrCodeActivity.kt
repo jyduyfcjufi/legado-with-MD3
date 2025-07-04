@@ -26,7 +26,8 @@ class QrCodeActivity : BaseActivity<ActivityQrcodeCaptureBinding>(), ScanResultC
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val fTag = "qrCodeFragment"
         val qrCodeFragment = QrCodeFragment()
         supportFragmentManager.beginTransaction()

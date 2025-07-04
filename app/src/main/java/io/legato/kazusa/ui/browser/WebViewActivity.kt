@@ -63,7 +63,8 @@ class WebViewActivity : VMBaseActivity<ActivityWebViewBinding, WebViewModel>() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding.titleBar.title = intent.getStringExtra("title") ?: getString(R.string.loading)
         binding.titleBar.subtitle = intent.getStringExtra("sourceName")
         viewModel.initData(intent) {

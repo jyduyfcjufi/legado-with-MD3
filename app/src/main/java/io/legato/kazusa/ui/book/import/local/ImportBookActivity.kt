@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import androidx.core.net.toUri
 
 /**
  * 导入本地书籍界面
@@ -58,7 +59,8 @@ class ImportBookActivity : BaseImportBookActivity<ImportBookViewModel>(),
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         searchView.queryHint = getString(R.string.screen) + " • " + getString(R.string.local_book)
         onBackPressedDispatcher.addCallback(this) {
             if (!goBackDir()) {
@@ -166,7 +168,7 @@ class ImportBookActivity : BaseImportBookActivity<ImportBookViewModel>(),
                 selectFolder.launch()
             } else {
                 val rootUri = if (lastPath.isUri()) {
-                    Uri.parse(lastPath)
+                    lastPath.toUri()
                 } else {
                     Uri.fromFile(File(lastPath))
                 }

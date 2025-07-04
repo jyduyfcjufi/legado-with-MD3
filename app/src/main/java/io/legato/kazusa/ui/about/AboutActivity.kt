@@ -20,8 +20,9 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
 
     override val binding by viewBinding(ActivityAboutBinding::inflate)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        //binding.llAbout.background = filletBackground
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
         val fTag = "aboutFragment"
         var aboutFragment = supportFragmentManager.findFragmentByTag(fTag)
         if (aboutFragment == null) aboutFragment = AboutFragment()

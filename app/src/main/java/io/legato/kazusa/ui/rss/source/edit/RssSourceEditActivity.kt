@@ -76,7 +76,8 @@ class RssSourceEditActivity :
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         softKeyboardTool.attachToWindow(window)
         initView()
         viewModel.initData(intent) {

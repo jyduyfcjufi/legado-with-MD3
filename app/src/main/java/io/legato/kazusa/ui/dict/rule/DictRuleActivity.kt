@@ -86,7 +86,8 @@ class DictRuleActivity : VMBaseActivity<ActivityDictRuleBinding, DictRuleViewMod
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initRecyclerView()
         initSelectActionView()
         observeDictRuleData()

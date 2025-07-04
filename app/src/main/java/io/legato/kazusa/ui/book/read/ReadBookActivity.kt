@@ -257,8 +257,8 @@ class ReadBookActivity : BaseReadBookActivity(),
     private var syncDialog: AlertDialog? = null
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         //binding.cursorLeft.setColorFilter(accentColor)
         //binding.cursorRight.setColorFilter(accentColor)
         binding.cursorLeft.setOnTouchListener(this)

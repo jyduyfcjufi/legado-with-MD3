@@ -539,6 +539,12 @@ object AppConfig : SharedPreferences.OnSharedPreferenceChangeListener {
             appCtx.putPrefInt(PreferKey.bookshelfSort, value)
         }
 
+    var bookshelfSortOrder: Int
+        get() = appCtx.getPrefInt(PreferKey.bookshelfSortOrder, 0)
+        set(value) {
+            appCtx.putPrefInt(PreferKey.bookshelfSortOrder, value)
+        }
+
     fun getBookSortByGroupId(groupId: Long): Int {
         return appDb.bookGroupDao.getByID(groupId)?.getRealBookSort()
             ?: bookshelfSort

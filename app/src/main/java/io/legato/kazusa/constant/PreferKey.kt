@@ -183,4 +183,5 @@ object PreferKey {
     const val contentSelectSpeakMod = "contentReadAloudMod"
 
     const val themePref = "themePref"
+    const val bookshelfSortOrder = "bookshelfSortOrder"
 }

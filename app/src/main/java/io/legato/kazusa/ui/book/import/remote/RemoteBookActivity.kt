@@ -16,7 +16,6 @@ import io.legato.kazusa.data.appDb
 import io.legato.kazusa.help.config.AppConfig
 import io.legato.kazusa.help.config.LocalConfig
 import io.legato.kazusa.lib.dialogs.alert
-//import io.legado.app.lib.theme.backgroundColor
 import io.legato.kazusa.model.remote.RemoteBook
 import io.legato.kazusa.ui.about.AppLogDialog
 import io.legato.kazusa.ui.book.import.BaseImportBookActivity
@@ -43,7 +42,8 @@ class RemoteBookActivity : BaseImportBookActivity<RemoteBookViewModel>(),
     private val adapter by lazy { RemoteBookAdapter(this, this) }
     private var groupMenu: SubMenu? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         searchView.queryHint = getString(R.string.screen) + " • " + getString(R.string.remote_book)
         onBackPressedDispatcher.addCallback(this) {
             if (!goBackDir()) {

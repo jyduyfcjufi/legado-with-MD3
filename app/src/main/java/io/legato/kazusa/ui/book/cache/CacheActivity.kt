@@ -109,7 +109,8 @@ class CacheActivity : VMBaseActivity<ActivityCacheBookBinding, CacheViewModel>()
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         groupId = intent.getLongExtra("groupId", -1)
         lifecycleScope.launch {
             binding.titleBar.subtitle = withContext(IO) {

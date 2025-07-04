@@ -20,7 +20,8 @@ open class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
 
     override val binding by viewBinding(ActivityWelcomeBinding::inflate)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 //        binding.ivBook.setColorFilter(accentColor)
 //        binding.vwTitleLine.setBackgroundColor(accentColor)
         // 避免从桌面启动程序后，会重新实例化入口类的activity

@@ -59,7 +59,8 @@ class FileAssociationActivity :
         buildMainHandler()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding.rotateLoading.visible()
         viewModel.importBookLiveData.observe(this) { uri ->
             importBook(uri)

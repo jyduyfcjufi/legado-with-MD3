@@ -5,11 +5,9 @@ package io.legato.kazusa.ui.rss.article
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,7 +15,6 @@ import io.legato.kazusa.R
 import io.legato.kazusa.base.VMBaseActivity
 import io.legato.kazusa.databinding.ActivityRssArtivlesBinding
 import io.legato.kazusa.help.source.sortUrls
-//import io.legado.app.lib.theme.accentColor
 import io.legato.kazusa.ui.login.SourceLoginActivity
 import io.legato.kazusa.ui.rss.source.edit.RssSourceEditActivity
 import io.legato.kazusa.ui.widget.dialog.VariableDialog
@@ -45,7 +42,8 @@ class RssSortActivity : VMBaseActivity<ActivityRssArtivlesBinding, RssSortViewMo
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setSupportActionBar(binding.topBar)
 
         viewModel.titleLiveData.observe(this) {

@@ -15,7 +15,8 @@ class VerificationCodeActivity :
 
     override val binding by viewBinding(ActivityTranslucenceBinding::inflate)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         intent.getStringExtra("imageUrl")?.let {
             val sourceOrigin = intent.getStringExtra("sourceOrigin")
             val sourceName = intent.getStringExtra("sourceName")

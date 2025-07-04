@@ -89,20 +89,20 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        upBottomMenu()
-        initView()
-        upHomePage()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // 绑定返回键逻辑
         onBackPressedDispatcher.addCallback(this) {
             if (pagePosition != 0) {
                 binding.viewPagerMain.currentItem = 0
                 return@addCallback
             }
+
             (fragmentMap[getFragmentId(0)] as? BookshelfFragment2)?.let {
-                if (it.back()) {
-                    return@addCallback
-                }
+                if (it.back()) return@addCallback
             }
+
             if (System.currentTimeMillis() - exitTime > 2000) {
                 toastOnUi(R.string.double_click_exit)
                 exitTime = System.currentTimeMillis()
@@ -114,6 +114,11 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
                 }
             }
         }
+
+        // 其他初始化逻辑
+        upBottomMenu()
+        initView()
+        upHomePage()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {

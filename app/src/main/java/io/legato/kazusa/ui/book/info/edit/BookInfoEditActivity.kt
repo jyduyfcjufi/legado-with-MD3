@@ -46,7 +46,8 @@ class BookInfoEditActivity :
     override val binding by viewBinding(ActivityBookInfoEditBinding::inflate)
     override val viewModel by viewModels<BookInfoEditViewModel>()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.bookData.observe(this) { upView(it) }
         if (viewModel.bookData.value == null) {
             intent.getStringExtra("bookUrl")?.let {

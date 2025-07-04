@@ -88,7 +88,8 @@ class AudioPlayActivity :
             }
         }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding.titleBar.setBackgroundResource(R.color.transparent)
         AudioPlay.register(this)
         viewModel.titleData.observe(this) {

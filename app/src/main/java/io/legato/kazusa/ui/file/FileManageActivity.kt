@@ -44,7 +44,8 @@ class FileManageActivity : VMBaseActivity<ActivityFileManageBinding, FileManageV
     }
     private val currentFiles = arrayListOf<File>()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initView()
         initSearchView()
         viewModel.upFiles(viewModel.rootDoc)

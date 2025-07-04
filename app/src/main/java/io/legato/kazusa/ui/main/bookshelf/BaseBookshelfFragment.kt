@@ -1,25 +1,18 @@
 package io.legato.kazusa.ui.main.bookshelf
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import com.google.android.material.chip.Chip
 import io.legato.kazusa.R
 import io.legato.kazusa.base.VMBaseFragment
-import io.legato.kazusa.constant.EventBus
 import io.legato.kazusa.data.appDb
 import io.legato.kazusa.data.entities.Book
 import io.legato.kazusa.data.entities.BookGroup
-import io.legato.kazusa.databinding.DialogBookshelfConfigBinding
 import io.legato.kazusa.databinding.DialogEditTextBinding
 import io.legato.kazusa.help.DirectLinkUpload
-import io.legato.kazusa.help.config.AppConfig
 import io.legato.kazusa.lib.dialogs.alert
 import io.legato.kazusa.ui.about.AppLogDialog
 import io.legato.kazusa.ui.book.cache.CacheActivity
@@ -33,7 +26,6 @@ import io.legato.kazusa.ui.main.MainFragmentInterface
 import io.legato.kazusa.ui.main.MainViewModel
 import io.legato.kazusa.ui.widget.dialog.WaitDialog
 import io.legato.kazusa.utils.isAbsUrl
-import io.legato.kazusa.utils.postEvent
 import io.legato.kazusa.utils.readText
 import io.legato.kazusa.utils.sendToClip
 import io.legato.kazusa.utils.showDialogFragment
@@ -97,7 +89,7 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
             R.id.menu_remote -> startActivity<RemoteBookActivity>()
             R.id.menu_search -> startActivity<SearchActivity>()
             R.id.menu_update_toc -> activityViewModel.upToc(books)
-            R.id.menu_bookshelf_layout -> configBookshelf()
+            R.id.menu_bookshelf_layout -> showDialogFragment<BookshelfConfigBottomSheet>()
             R.id.menu_group_manage -> showDialogFragment<GroupManageDialog>()
             R.id.menu_add_local -> startActivity<ImportBookActivity>()
             R.id.menu_add_url -> showAddBookByUrlAlert()
@@ -162,142 +154,6 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
             cancelButton()
         }
     }
-
-    @SuppressLint("InflateParams")
-    fun configBookshelf() {
-        alert {
-
-            val orientation = requireContext().resources.configuration.orientation
-            val bookshelfLayout = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                AppConfig.bookshelfLayoutLandscape
-            } else {
-                AppConfig.bookshelfLayoutPortrait
-            }
-
-            val isGrid = bookshelfLayout > 0
-            val columnCount = (bookshelfLayout.takeIf { it > 0 } ?: 1)
-
-            val bookshelfSort = AppConfig.bookshelfSort
-            val alertBinding =
-                DialogBookshelfConfigBinding.inflate(layoutInflater)
-                    .apply {
-
-                        val groupStyleArray = resources.getStringArray(R.array.group_style)
-                        val chipGroupStyle = chipGroupStyle
-
-                        groupStyleArray.forEachIndexed { index, label ->
-                            val chip = Chip(context).apply {
-                                text = label
-                                isCheckable = true
-                                isClickable = true
-                                id = View.generateViewId()
-                            }
-                            chipGroupStyle.addView(chip)
-                            if (index == AppConfig.bookGroupStyle) {
-                                chipGroupStyle.check(chip.id)
-                            }
-                        }
-
-                        val sortArray = resources.getStringArray(R.array.bookshelf_px_array)
-                        val chipGroupSort = chipGroupSort
-
-                        sortArray.forEachIndexed { index, label ->
-                            val chip = Chip(context).apply {
-                                text = label
-                                isCheckable = true
-                                isClickable = true
-                                id = View.generateViewId()
-                            }
-                            chipGroupSort.addView(chip)
-                            if (index == AppConfig.bookshelfSort) {
-                                chipGroupSort.check(chip.id)
-                            }
-                        }
-
-                        swShowUnread.isChecked = AppConfig.showUnread
-                        swShowLastUpdateTime.isChecked = AppConfig.showLastUpdateTime
-                        swShowWaitUpBooks.isChecked = AppConfig.showWaitUpCount
-                        swShowBookshelfFastScroller.isChecked = AppConfig.showBookshelfFastScroller
-
-                        chipList.isChecked = !isGrid
-                        chipGrid.isChecked = isGrid
-                        sliderText.isVisible = isGrid
-                        sliderGridCount.isVisible = isGrid
-                        sliderGridCount.value = columnCount.toFloat()
-
-                        chipGroupLayout.setOnCheckedStateChangeListener { group, checkedIds ->
-                            sliderText.isVisible = checkedIds.firstOrNull() == R.id.chip_grid
-                            sliderGridCount.isVisible = checkedIds.firstOrNull() == R.id.chip_grid
-                        }
-
-                    }
-            customView { alertBinding.root }
-
-            okButton {
-                alertBinding.apply {
-                    var notifyMain = false
-                    var recreate = false
-
-                    if (AppConfig.bookGroupStyle != chipGroupStyle.checkedChipId) {
-                        AppConfig.bookGroupStyle = chipGroupStyle.indexOfChild(chipGroupStyle.findViewById(chipGroupStyle.checkedChipId))
-                        notifyMain = true
-                    }
-
-                    if (AppConfig.showUnread != swShowUnread.isChecked) {
-                        AppConfig.showUnread = swShowUnread.isChecked
-                        postEvent(EventBus.BOOKSHELF_REFRESH, "")
-                    }
-                    if (AppConfig.showLastUpdateTime != swShowLastUpdateTime.isChecked) {
-                        AppConfig.showLastUpdateTime = swShowLastUpdateTime.isChecked
-                        postEvent(EventBus.BOOKSHELF_REFRESH, "")
-                    }
-                    if (AppConfig.showWaitUpCount != swShowWaitUpBooks.isChecked) {
-                        AppConfig.showWaitUpCount = swShowWaitUpBooks.isChecked
-                        activityViewModel.postUpBooksLiveData(true)
-                    }
-                    if (AppConfig.showBookshelfFastScroller != swShowBookshelfFastScroller.isChecked) {
-                        AppConfig.showBookshelfFastScroller = swShowBookshelfFastScroller.isChecked
-                        postEvent(EventBus.BOOKSHELF_REFRESH, "")
-                    }
-                    if (bookshelfSort != chipGroupSort.indexOfChild(chipGroupSort.findViewById(chipGroupSort.checkedChipId))) {
-                        AppConfig.bookshelfSort = chipGroupSort.indexOfChild(chipGroupSort.findViewById(chipGroupSort.checkedChipId))
-                        upSort()
-                    }
-
-                    val isNowGrid = alertBinding.chipGrid.isChecked
-                    val selectedColumn = alertBinding.sliderGridCount.value.toInt()
-                    val newLayout = if (isNowGrid) selectedColumn else 0
-
-                    if (bookshelfLayout != newLayout) {
-                        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            AppConfig.bookshelfLayoutLandscape = newLayout
-                            if (newLayout == 0) {
-                                activityViewModel.booksGridRecycledViewPool.clear()
-                            } else {
-                                activityViewModel.booksListRecycledViewPool.clear()
-                            }
-                        } else {
-                            AppConfig.bookshelfLayoutPortrait = newLayout
-                            if (newLayout == 0) {
-                                activityViewModel.booksGridRecycledViewPool.clear()
-                            } else {
-                                activityViewModel.booksListRecycledViewPool.clear()
-                            }
-                        }
-                        recreate = true
-                    }
-
-                    if (recreate) {
-                        postEvent(EventBus.RECREATE, "")
-                    } else if (notifyMain) {
-                        postEvent(EventBus.NOTIFY_MAIN, false)
-                    }
-                }
-            }
-            cancelButton()
-        }
-    }
-
 
     private fun importBookshelfAlert(groupId: Long) {
         alert(titleResource = R.string.import_bookshelf) {

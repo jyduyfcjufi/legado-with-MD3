@@ -3,36 +3,26 @@ package io.legato.kazusa.base
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.widget.FrameLayout
-import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.color.DynamicColors
 import io.legato.kazusa.R
-import io.legato.kazusa.constant.AppConst
 import io.legato.kazusa.constant.AppLog
 import io.legato.kazusa.constant.EventBus
-import io.legato.kazusa.constant.PreferKey
 import io.legato.kazusa.constant.Theme
 import io.legato.kazusa.help.config.ThemeConfig
-//import io.legado.app.lib.theme.backgroundColor
-//import io.legado.app.lib.theme.primaryColor
 import io.legato.kazusa.utils.applyOpenTint
 import io.legato.kazusa.utils.applyTint
 import io.legato.kazusa.utils.disableAutoFill
-import io.legato.kazusa.utils.getPrefBoolean
 import io.legato.kazusa.utils.getPrefString
 import io.legato.kazusa.utils.hideSoftInput
 import io.legato.kazusa.utils.observeEvent
@@ -88,7 +78,7 @@ abstract class BaseActivity<VB : ViewBinding>(
 
 
         observeLiveBus()
-        onActivityCreated(savedInstanceState)
+        //onActivityCreated(savedInstanceState)
     }
 
     override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration) {
@@ -107,7 +97,7 @@ abstract class BaseActivity<VB : ViewBinding>(
 //        //setupSystemBar()
 //    }
 
-    abstract fun onActivityCreated(savedInstanceState: Bundle?)
+
 
     final override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val bool = onCompatCreateOptionsMenu(menu)

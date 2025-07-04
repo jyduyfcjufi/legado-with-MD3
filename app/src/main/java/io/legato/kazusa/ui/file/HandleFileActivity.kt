@@ -59,7 +59,8 @@ class HandleFileActivity :
         } ?: finish()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         mode = intent.getIntExtra("mode", 0)
         viewModel.errorLiveData.observe(this) {
             toastOnUi(it)

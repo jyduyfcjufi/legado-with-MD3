@@ -40,7 +40,8 @@ class AllBookmarkActivity : VMBaseActivity<ActivityAllBookmarkBinding, AllBookma
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initView()
         lifecycleScope.launch {
             appDb.bookmarkDao.flowAll().catch {

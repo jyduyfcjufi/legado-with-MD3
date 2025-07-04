@@ -154,7 +154,8 @@ class BookInfoActivity :
     override val viewModel by viewModels<BookInfoViewModel>()
 
     @SuppressLint("PrivateResource")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         setSupportActionBar(binding.topBar)
 

@@ -101,7 +101,8 @@ class BookshelfManageActivity :
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.groupId = intent.getLongExtra("groupId", -1)
         lifecycleScope.launch {
             viewModel.groupName = withContext(IO) {

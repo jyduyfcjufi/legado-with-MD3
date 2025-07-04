@@ -58,7 +58,8 @@ class SearchContentActivity :
     private var searchJob: Job? = null
     private var initJob: Job? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 //        val bbg = bottomBackground
 //        val btc = getPrimaryTextColor(ColorUtils.isColorLight(bbg))
 //        binding.llSearchBaseInfo.setBackgroundColor(bbg)

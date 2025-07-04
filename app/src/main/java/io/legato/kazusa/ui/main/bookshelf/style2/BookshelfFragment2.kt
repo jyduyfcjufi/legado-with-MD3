@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.util.Locale
 import kotlin.math.max
 
 /**
@@ -176,27 +177,25 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
             appDb.bookDao.flowByGroup(groupId).map { list ->
 
                 //排序
+                val isDescending = AppConfig.bookshelfSortOrder == 1
+
                 when (AppConfig.getBookSortByGroupId(groupId)) {
-                    1 -> list.sortedByDescending {
-                        it.latestChapterTime
-                    }
+                    1 -> if (isDescending) list.sortedByDescending { it.latestChapterTime }
+                    else list.sortedBy { it.latestChapterTime }
 
-                    2 -> list.sortedWith { o1, o2 ->
-                        o1.name.cnCompare(o2.name)
-                    }
+                    2 -> if (isDescending) list.sortedWith(compareByDescending { it.name.cnCompareKey() })
+                    else list.sortedWith(compareBy { it.name.cnCompareKey() })
 
-                    3 -> list.sortedBy {
-                        it.order
-                    }
+                    3 -> if (isDescending) list.sortedByDescending { it.order }
+                    else list.sortedBy { it.order }
 
-                    4 -> list.sortedByDescending {
-                        max(it.latestChapterTime, it.durChapterTime)
-                    }
+                    4 -> if (isDescending) list.sortedByDescending { max(it.latestChapterTime, it.durChapterTime) }
+                    else list.sortedBy { max(it.latestChapterTime, it.durChapterTime) }
 
-                    else -> list.sortedByDescending {
-                        it.durChapterTime
-                    }
+                    else -> if (isDescending) list.sortedByDescending { it.durChapterTime }
+                    else list.sortedBy { it.durChapterTime }
                 }
+
             }.flowWithLifecycleAndDatabaseChangeFirst(
                 viewLifecycleOwner.lifecycle,
                 Lifecycle.State.RESUMED,
@@ -210,6 +209,10 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
                 binding.refreshLayout.isEnabled = enableRefresh && getItemCount() > 0
             }
         }
+    }
+
+    fun String.cnCompareKey(): String {
+        return this.trim().lowercase(Locale.getDefault())
     }
 
     fun back(): Boolean {

@@ -54,7 +54,8 @@ class TocActivity : VMBaseActivity<ActivityChapterListBinding, TocViewModel>(),
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         tabLayout = binding.titleBar.findViewById(R.id.tab_layout)
         //tabLayout.isTabIndicatorFullWidth = false
         //tabLayout.setSelectedTabIndicatorColor(accentColor)

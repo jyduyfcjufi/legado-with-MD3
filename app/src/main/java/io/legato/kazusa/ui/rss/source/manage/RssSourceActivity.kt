@@ -107,7 +107,8 @@ class RssSourceActivity : VMBaseActivity<ActivityRssSourceBinding, RssSourceView
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initRecyclerView()
         initSearchView()
         initGroupFlow()

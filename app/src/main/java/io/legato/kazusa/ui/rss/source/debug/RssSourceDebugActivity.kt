@@ -27,7 +27,8 @@ class RssSourceDebugActivity : VMBaseActivity<ActivitySourceDebugBinding, RssSou
 
     private val adapter by lazy { RssSourceDebugAdapter(this) }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initRecyclerView()
         initSearchView()
         viewModel.observe { state, msg ->

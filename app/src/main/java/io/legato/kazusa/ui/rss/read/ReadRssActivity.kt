@@ -95,7 +95,8 @@ class ReadRssActivity : VMBaseActivity<ActivityRssReadBinding, ReadRssViewModel>
         return viewModel.rssSource
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.upStarMenuData.observe(this) { upStarMenu() }
         viewModel.upTtsMenuData.observe(this) { upTtsMenu(it) }
         binding.titleBar.title = intent.getStringExtra("title")

@@ -38,7 +38,8 @@ class RuleSubActivity : BaseActivity<ActivityRuleSubBinding>(),
     override val binding by viewBinding(ActivityRuleSubBinding::inflate)
     private val adapter by lazy { RuleSubAdapter(this, this) }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initView()
         initData()
     }

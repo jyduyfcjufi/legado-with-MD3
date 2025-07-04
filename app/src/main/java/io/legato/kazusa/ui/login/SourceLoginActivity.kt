@@ -15,7 +15,8 @@ class SourceLoginActivity : VMBaseActivity<ActivitySourceLoginBinding, SourceLog
     override val binding by viewBinding(ActivitySourceLoginBinding::inflate)
     override val viewModel by viewModels<SourceLoginViewModel>()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.initData(intent) { source ->
             initView(source)
         }

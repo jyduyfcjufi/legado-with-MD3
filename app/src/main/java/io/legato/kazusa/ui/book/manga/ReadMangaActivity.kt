@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
+import android.os.PersistableBundle
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -152,9 +153,7 @@ class ReadMangaActivity : VMBaseActivity<ActivityMangaBinding, ReadMangaViewMode
     override fun onCreate(savedInstanceState: Bundle?) {
         upLayoutInDisplayCutoutMode()
         super.onCreate(savedInstanceState)
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
         ReadManga.register(this)
         upSystemUiVisibility(false)
         initRecyclerView()
