@@ -2,11 +2,10 @@ package io.legato.kazusa.ui.widget
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.util.AttributeSet
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.color.MaterialColors
+import io.legato.kazusa.utils.themeColor
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class LabelsBar @JvmOverloads constructor(
@@ -44,9 +43,8 @@ class LabelsBar @JvmOverloads constructor(
                 chipStrokeWidth = 0f
 
                 chipBackgroundColor = ColorStateList.valueOf(
-                    MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimaryContainer, Color.LTGRAY)
+                    context.themeColor(com.google.android.material.R.attr.colorPrimaryContainer)
                 )
-
 
                 usedChips.add(this)
             }

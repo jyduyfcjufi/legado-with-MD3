@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/bg_image"
-        android:foreground="@drawable/bg_book_mask"
+        android:foreground="@drawable/bg_book_mask_land"
         android:scaleType="centerCrop" />
 
     <com.google.android.material.appbar.AppBarLayout
@@ -45,306 +45,317 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_weight="2"
+            android:fillViewport="true"
+            android:fitsSystemWindows="false"
+            android:focusable="true"
+            android:padding="0dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingHorizontal="32dp"
-                tools:ignore="RtlSymmetry">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="120dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginVertical="16dp"
-                    app:cardCornerRadius="16dp">
-
-                    <io.legato.kazusa.ui.widget.image.CoverImageView
-                        android:id="@+id/iv_cover"
-                        android:layout_width="150dp"
-                        android:layout_height="210dp"
-                        android:contentDescription="@string/img_cover"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/image_cover_default" />
-
-                </androidx.cardview.widget.CardView>
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:paddingHorizontal="32dp"
+                    tools:ignore="RtlSymmetry">
 
-                    <TextView
-                        android:id="@+id/tv_name"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/book_name"
-                        style="@style/TextAppearance.Material3.ActionBar.Title"
-                        tools:ignore="RtlHardcoded" />
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="32dp"
+                        app:cardCornerRadius="16dp">
+
+                        <io.legato.kazusa.ui.widget.image.CoverImageView
+                            android:id="@+id/iv_cover"
+                            android:layout_width="150dp"
+                            android:layout_height="210dp"
+                            android:contentDescription="@string/img_cover"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/image_cover_default" />
+
+                    </androidx.cardview.widget.CardView>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:paddingTop="6dp"
-                        android:paddingBottom="2dp"
-                        tools:ignore="UseCompoundDrawables">
-
-                        <ImageView
-                            android:layout_width="18sp"
-                            android:layout_height="18sp"
-                            android:contentDescription="@string/author"
-                            android:src="@drawable/ic_author"
-                            tools:ignore="RtlHardcoded,RtlSymmetry" />
-
-                        <TextView
-                            android:id="@+id/tv_author"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="2dp"
-                            android:ellipsize="end"
-                            android:singleLine="true"
-                            android:text="@string/author"
-                            android:textSize="14sp"
-                            tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/iv_web"
-                            android:layout_width="18sp"
-                            android:layout_height="18sp"
-                            android:contentDescription="@string/origin_format"
-                            android:src="@drawable/ic_web_outline"
-                            tools:ignore="RtlHardcoded,RtlSymmetry" />
-
-                        <TextView
-                            android:id="@+id/tv_origin"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="2dp"
-                            android:ellipsize="end"
-                            android:paddingRight="6dp"
-                            android:singleLine="true"
-                            android:textSize="14sp"
-                            tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry"
-                            tools:text="@string/origin_format" />
-
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/scroll_view"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fillViewport="true"
-                android:fitsSystemWindows="false"
-                android:focusable="true"
-                android:padding="0dp"
-                android:scrollbarStyle="outsideOverlay"
-                android:scrollbars="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/ll_info"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/bg_gradient_mask_land"
+                        android:layout_gravity="center"
                         android:orientation="vertical"
-                        android:layout_marginStart="16dp"
-                        android:padding="8dp">
+                        android:paddingTop="16dp"
+                        android:paddingHorizontal="30dp">
 
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:scrollbars="none">
-
-                            <io.legato.kazusa.ui.widget.LabelsBar
-                                android:id="@+id/lb_kind"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:visibility="visible" />
-
-                        </HorizontalScrollView>
+                            android:text="@string/book_name"
+                            style="@style/TextAppearance.Material3.ActionBar.Title"
+                            tools:ignore="RtlHardcoded" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingHorizontal="8dp"
-                            android:paddingBottom="8dp">
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingTop="6dp"
+                            android:paddingBottom="2dp"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="18sp"
+                                android:layout_height="18sp"
+                                android:contentDescription="@string/author"
+                                android:src="@drawable/ic_author"
+                                tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                            <TextView
+                                android:id="@+id/tv_author"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="2dp"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="@string/author"
+                                android:textSize="14sp"
+                                tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:id="@+id/iv_web"
+                                android:layout_width="18sp"
+                                android:layout_height="18sp"
+                                android:contentDescription="@string/origin_format"
+                                android:src="@drawable/ic_web_outline"
+                                tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                            <TextView
+                                android:id="@+id/tv_origin"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="2dp"
+                                android:ellipsize="end"
+                                android:paddingRight="6dp"
+                                android:singleLine="true"
+                                android:textSize="14sp"
+                                tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry"
+                                tools:text="@string/origin_format" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_info"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@drawable/bg_gradient_mask_land"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:scrollbars="none">
+
+                        <io.legato.kazusa.ui.widget.LabelsBar
+                            android:id="@+id/lb_kind"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible" />
+
+                    </HorizontalScrollView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="8dp"
+                        android:paddingBottom="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_shelf"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:backgroundTint="?attr/colorSurfaceContainer"
+                                app:cornerRadius="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="6dp"
+                                android:padding="8dp"
+                                android:text="@string/remove_from_bookshelf"
+                                android:textSize="13sp"
+                                app:icon="@drawable/ic_clear_all"
+                                app:iconGravity="top"
+                                app:iconPadding="4dp"
+                                app:iconSize="20dp" />
+
+                            <!-- 查看目录按钮 -->
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/tv_toc_view"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:backgroundTint="?attr/colorSurfaceContainer"
+                                app:cornerRadius="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="8dp"
+                                android:padding="8dp"
+                                android:text="@string/view_toc"
+                                android:textSize="13sp"
+                                app:icon="@drawable/ic_toc"
+                                app:iconGravity="top"
+                                app:iconPadding="4dp"
+                                app:iconSize="20dp" />
+
+                            <!-- 更换分组按钮 -->
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/tv_change_group"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:backgroundTint="?attr/colorSurfaceContainer"
+                                app:cornerRadius="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="8dp"
+                                android:padding="8dp"
+                                android:text="@string/change_group"
+                                android:textSize="13sp"
+                                app:icon="@drawable/ic_groups"
+                                app:iconGravity="top"
+                                app:iconPadding="4dp"
+                                app:iconSize="20dp" />
+
+                            <!-- 更换来源按钮（保持原样） -->
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_change_source"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:backgroundTint="?attr/colorSurfaceContainer"
+                                app:cornerRadius="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="@string/book_source"
+                                android:padding="8dp"
+                                app:icon="@drawable/ic_change_source"
+                                android:textSize="13sp"
+                                app:iconGravity="top"
+                                app:iconPadding="4dp"
+                                app:iconSize="20dp"
+                                tools:contentDescription="@string/change_origin" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingVertical="16dp"
+                            android:paddingHorizontal="2dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_toc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="6dp"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="@string/toc_s" />
+
+                            <TextView
+                                android:id="@+id/tv_lasted"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="6dp"
+                                android:singleLine="true"
+                                android:textSize="14sp"
+                                tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry"
+                                tools:text="@string/read_dur_progress" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/btn_shelf"
-                                    style="@style/Widget.Material3.Button.TonalButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="6dp"
-                                    android:padding="8dp"
-                                    android:text="@string/remove_from_bookshelf"
-                                    android:textSize="13sp"
-                                    app:icon="@drawable/ic_clear_all"
-                                    app:iconGravity="top"
-                                    app:iconPadding="4dp"
-                                    app:iconSize="20dp" />
-
-                                <!-- 查看目录按钮 -->
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/tv_toc_view"
-                                    style="@style/Widget.Material3.Button.TonalButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginHorizontal="8dp"
-                                    android:padding="8dp"
-                                    android:text="@string/view_toc"
-                                    android:textSize="13sp"
-                                    app:icon="@drawable/ic_toc"
-                                    app:iconGravity="top"
-                                    app:iconPadding="4dp"
-                                    app:iconSize="20dp" />
-
-                                <!-- 更换分组按钮 -->
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/tv_change_group"
-                                    style="@style/Widget.Material3.Button.TonalButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginHorizontal="8dp"
-                                    android:padding="8dp"
-                                    android:text="@string/change_group"
-                                    android:textSize="13sp"
-                                    app:icon="@drawable/ic_groups"
-                                    app:iconGravity="top"
-                                    app:iconPadding="4dp"
-                                    app:iconSize="20dp" />
-
-                                <!-- 更换来源按钮（保持原样） -->
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/btn_change_source"
-                                    style="@style/Widget.Material3.Button.TonalButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:text="@string/book_source"
-                                    android:padding="8dp"
-                                    app:icon="@drawable/ic_change_source"
-                                    android:textSize="13sp"
-                                    app:iconGravity="top"
-                                    app:iconPadding="4dp"
-                                    app:iconSize="20dp"
-                                    tools:contentDescription="@string/change_origin" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingVertical="8dp"
-                                android:paddingHorizontal="2dp"
-                                android:orientation="vertical">
-
                                 <TextView
-                                    android:id="@+id/tv_toc"
-                                    android:layout_width="match_parent"
+                                    android:id="@+id/tv_chapter"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:paddingBottom="6dp"
-                                    android:textSize="16sp"
+                                    android:textColor="?attr/colorPrimary"
+                                    android:singleLine="true"
+                                    android:paddingEnd="8dp"
+                                    android:textSize="14sp"
                                     android:textStyle="bold"
-                                    tools:text="@string/toc_s" />
+                                    tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry"
+                                    tools:text="@string/read_chapter_total" />
 
                                 <TextView
-                                    android:id="@+id/tv_lasted"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="|"
+                                    android:textColor="?attr/colorSecondary"
+                                    android:layout_marginEnd="8dp"/>
+
+                                <TextView
+                                    android:id="@+id/tv_chapter_index"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:paddingBottom="6dp"
+                                    android:textColor="?attr/colorSecondary"
                                     android:singleLine="true"
                                     android:textSize="14sp"
                                     tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry"
-                                    tools:text="@string/read_dur_progress" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tv_chapter"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textColor="?attr/colorSecondaryVariant"
-                                        android:singleLine="true"
-                                        android:paddingEnd="8dp"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry"
-                                        tools:text="@string/read_chapter_total" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:text="|"
-                                        android:textColor="?attr/colorSecondary"
-                                        android:layout_marginEnd="8dp"/>
-
-                                    <TextView
-                                        android:id="@+id/tv_chapter_index"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textColor="?attr/colorSecondary"
-                                        android:singleLine="true"
-                                        android:textSize="14sp"
-                                        tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry"
-                                        tools:text="@string/read_chapter_index"/>
-                                </LinearLayout>
-
+                                    tools:text="@string/read_chapter_index"/>
                             </LinearLayout>
 
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tv_detail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginHorizontal="8dp"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:minHeight="48dp"
-                            android:paddingBottom="80dp"
-                            android:lineSpacingExtra="4dp"
-                            android:text="@string/book_intro"
-                            android:textIsSelectable="true"
-                            android:textSize="14sp"
-                            android:visibility="visible"
-                            tools:ignore="RtlHardcoded,RtlSymmetry" />
-
                     </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
-        </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginHorizontal="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:minHeight="48dp"
+                        android:paddingBottom="80dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="@string/book_intro"
+                        android:textIsSelectable="true"
+                        android:textSize="14sp"
+                        android:visibility="visible"
+                        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

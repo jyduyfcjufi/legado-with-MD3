@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
 import android.view.animation.Animation
@@ -19,19 +18,10 @@ import io.legato.kazusa.constant.PreferKey
 import io.legato.kazusa.databinding.ViewReadMenuBinding
 import io.legato.kazusa.help.config.AppConfig
 import io.legato.kazusa.help.config.LocalConfig
-import io.legato.kazusa.help.config.ReadBookConfig
-import io.legato.kazusa.help.config.ThemeConfig
 import io.legato.kazusa.help.coroutine.Coroutine
 import io.legato.kazusa.help.source.getSourceType
 import io.legato.kazusa.lib.dialogs.alert
-//import io.legado.app.lib.theme.accentColor
-//import io.legado.app.lib.theme.bottomBackground
-//import io.legado.app.lib.theme.buttonDisabledColor
-//import io.legado.app.lib.theme.getPrimaryTextColor
-//import io.legado.app.lib.theme.primaryColor
-//import io.legado.app.lib.theme.primaryTextColor
 import io.legato.kazusa.model.ReadBook
-import io.legato.kazusa.ui.book.read.config.MoreConfigDialog
 import io.legato.kazusa.ui.browser.WebViewActivity
 import io.legato.kazusa.ui.widget.seekbar.SeekBarChangeListener
 import io.legato.kazusa.utils.ConstraintModify
@@ -45,7 +35,6 @@ import io.legato.kazusa.utils.loadAnimation
 import io.legato.kazusa.utils.modifyBegin
 import io.legato.kazusa.utils.openUrl
 import io.legato.kazusa.utils.putPrefBoolean
-import io.legato.kazusa.utils.showDialogFragment
 import io.legato.kazusa.utils.startActivity
 import io.legato.kazusa.utils.visible
 import splitties.views.onClick
@@ -75,8 +64,8 @@ class ReadMenu @JvmOverloads constructor(
     private val menuBottomOut: Animation by lazy {
         loadAnimation(context, R.anim.anim_readbook_bottom_out)
     }
-    private val immersiveMenu: Boolean
-        get() = AppConfig.readBarStyleFollowPage && ReadBookConfig.durConfig.curBgType() == 0
+//    private val immersiveMenu: Boolean
+//        get() = AppConfig.readBarStyleFollowPage && ReadBookConfig.durConfig.curBgType() == 0
 //    private var bgColor: Int = if (immersiveMenu) {
 //        kotlin.runCatching {
 //            ReadBookConfig.durConfig.curBgStr().toColorInt()
@@ -160,29 +149,29 @@ class ReadMenu @JvmOverloads constructor(
         bindEvent()
     }
 
-    private fun initView(reset: Boolean = false) = binding.run {
+    private fun initView() = binding.run {
 //        if (AppConfig.isNightTheme) {
 //            fabNightTheme.setIconResource(R.drawable.ic_daytime)
 //        } else {
 //            fabNightTheme.setIconResource(R.drawable.ic_brightness)
 //        }
         initAnimation()
-        if (immersiveMenu) {
-//            val lightTextColor = ColorUtils.withAlpha(ColorUtils.lightenColor(textColor), 0.75f)
-//            titleBar.setTextColor(textColor)
-//            titleBar.setBackgroundColor(bgColor)
-//            titleBar.setColorFilter(textColor)
-//            tvChapterName.setTextColor(lightTextColor)
-//            tvChapterUrl.setTextColor(lightTextColor)
-        } else if (reset) {
-//            val bgColor = context.primaryColor
-//            val textColor = context.primaryTextColor
-//            titleBar.setTextColor(textColor)
-//            titleBar.setBackgroundColor(bgColor)
-//            titleBar.setColorFilter(textColor)
-//            tvChapterName.setTextColor(textColor)
-//            tvChapterUrl.setTextColor(textColor)
-        }
+//        if (immersiveMenu) {
+////            val lightTextColor = ColorUtils.withAlpha(ColorUtils.lightenColor(textColor), 0.75f)
+////            titleBar.setTextColor(textColor)
+////            titleBar.setBackgroundColor(bgColor)
+////            titleBar.setColorFilter(textColor)
+////            tvChapterName.setTextColor(lightTextColor)
+////            tvChapterUrl.setTextColor(lightTextColor)
+//        } else if (reset) {
+////            val bgColor = context.primaryColor
+////            val textColor = context.primaryTextColor
+////            titleBar.setTextColor(textColor)
+////            titleBar.setBackgroundColor(bgColor)
+////            titleBar.setColorFilter(textColor)
+////            tvChapterName.setTextColor(textColor)
+////            tvChapterUrl.setTextColor(textColor)
+//        }
         val brightnessBackground = GradientDrawable()
         brightnessBackground.cornerRadius = 5F.dpToPx()
        //brightnessBackground.setColor(ColorUtils.adjustAlpha(bgColor, 0.5f))
@@ -230,13 +219,13 @@ class ReadMenu @JvmOverloads constructor(
 
     fun reset() {
         upColorConfig()
-        initView(true)
+        initView()
     }
 
     fun refreshMenuColorFilter() {
-        if (immersiveMenu) {
-            //binding.titleBar.setColorFilter(textColor)
-        }
+//        if (immersiveMenu) {
+//            //binding.titleBar.setColorFilter(textColor)
+//        }
     }
 
     private fun upColorConfig() {
@@ -514,8 +503,6 @@ class ReadMenu @JvmOverloads constructor(
 
     fun upSeekBar() {
         binding.seekReadPage.apply {
-            Log.d("SliderDebug", "durPageIndex: ${ReadBook.durPageIndex}, pageSize: ${ReadBook.curTextChapter?.pageSize}")
-            Log.d("SliderDebug", "durChapterIndex: ${ReadBook.durChapterIndex}, simulatedChapterSize: ${ReadBook.simulatedChapterSize}")
             when (AppConfig.progressBarBehavior) {
                 "page" -> {
                     ReadBook.curTextChapter?.let { chapter ->

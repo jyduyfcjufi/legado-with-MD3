@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +20,6 @@ import io.legato.kazusa.data.entities.Book
 import io.legato.kazusa.data.entities.BookGroup
 import io.legato.kazusa.databinding.FragmentBookshelf2Binding
 import io.legato.kazusa.help.config.AppConfig
-//import io.legado.app.lib.theme.accentColor
-//import io.legado.app.lib.theme.primaryColor
 import io.legato.kazusa.ui.book.group.GroupEditDialog
 import io.legato.kazusa.ui.book.info.BookInfoActivity
 import io.legato.kazusa.ui.book.search.SearchActivity
@@ -35,7 +34,6 @@ import io.legato.kazusa.utils.startActivityForBook
 import io.legato.kazusa.utils.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
@@ -67,9 +65,11 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
             BooksAdapterGrid(requireContext(), this)
         }
     }
+
     private var bookGroups: List<BookGroup> = emptyList()
     private var booksFlowJob: Job? = null
     override var groupId = BookGroup.IdRoot
+    private var allBooks: List<Book> = emptyList()
     override var books: List<Book> = emptyList()
     private var enableRefresh = true
 
@@ -77,12 +77,11 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
         setSupportToolbar(binding.titleBar.toolbar)
         initRecyclerView()
         initBookGroupData()
+        initAllBooksData()
         initBooksData()
     }
 
     private fun initRecyclerView() {
-//        binding.rvBookshelf.setEdgeEffectColor(primaryColor)
-//        binding.refreshLayout.setColorSchemeColors(accentColor)
         binding.refreshLayout.setOnRefreshListener {
             binding.refreshLayout.isRefreshing = false
             activityViewModel.upToc(books)
@@ -111,6 +110,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
                 }
             }
         })
+        binding.rvBookshelf.itemAnimator = DefaultItemAnimator()
     }
 
     override fun upGroup(data: List<BookGroup>) {
@@ -123,7 +123,35 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
     }
 
     override fun upSort() {
+        initAllBooksData()
         initBooksData()
+    }
+
+    private var allBooksFlowJob: Job? = null
+
+    private fun initAllBooksData() {
+        allBooksFlowJob?.cancel()
+        allBooksFlowJob = viewLifecycleOwner.lifecycleScope.launch {
+            appDb.bookDao.flowAll().map { list ->
+                when (AppConfig.getBookSortByGroupId(BookGroup.IdRoot)) {
+                    1 -> list.sortedByDescending { it.latestChapterTime }
+                    2 -> list.sortedWith { o1, o2 -> o1.name.cnCompare(o2.name) }
+                    3 -> list.sortedBy { it.order }
+                    4 -> list.sortedByDescending { max(it.latestChapterTime, it.durChapterTime) }
+                    else -> list.sortedByDescending { it.durChapterTime }
+                }
+            }.flowWithLifecycleAndDatabaseChangeFirst(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.RESUMED,
+                AppDatabase.BOOK_TABLE_NAME
+            ).catch {
+                AppLog.put("所有书籍更新出错", it)
+            }.conflate().flowOn(Dispatchers.Default).collect { list ->
+                allBooks = list
+                booksAdapter.setAllBooks(allBooks)
+                booksAdapter.updateItems()
+            }
+        }
     }
 
     private fun initBooksData() {
@@ -137,14 +165,16 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
             bookGroups.firstOrNull {
                 groupId == it.groupId
             }?.let {
-                binding.titleBar.title = "${getString(R.string.bookshelf)}(${it.groupName})"
+                binding.titleBar.title = it.groupName
                 binding.refreshLayout.isEnabled = it.enableRefresh
                 enableRefresh = it.enableRefresh
             }
         }
         booksFlowJob?.cancel()
         booksFlowJob = viewLifecycleOwner.lifecycleScope.launch {
+
             appDb.bookDao.flowByGroup(groupId).map { list ->
+
                 //排序
                 when (AppConfig.getBookSortByGroupId(groupId)) {
                     1 -> list.sortedByDescending {
@@ -178,7 +208,6 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
                 booksAdapter.updateItems()
                 binding.tvEmptyMsg.isGone = getItemCount() > 0
                 binding.refreshLayout.isEnabled = enableRefresh && getItemCount() > 0
-                delay(100)
             }
         }
     }
@@ -244,11 +273,13 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
     }
 
     override fun getItems(): List<Any> {
-        if (groupId != BookGroup.IdRoot) {
-            return books
+        return if (groupId == BookGroup.IdRoot) {
+            bookGroups + books
+        } else {
+            books
         }
-        return bookGroups + books
     }
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun observeLiveBus() {

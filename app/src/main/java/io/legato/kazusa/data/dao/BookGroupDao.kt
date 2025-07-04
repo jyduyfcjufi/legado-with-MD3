@@ -85,6 +85,9 @@ interface BookGroupDao {
     @Delete
     fun delete(vararg bookGroup: BookGroup)
 
+    @Query("UPDATE book_groups SET cover = NULL WHERE groupId = :groupId")
+    fun clearCover(groupId: Long)
+
     fun isInRules(id: Long): Boolean {
         if (id < 0) {
             return true

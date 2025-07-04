@@ -67,7 +67,8 @@ class GroupEditDialog() : BaseBottomSheetDialogFragment(R.layout.dialog_book_gro
         bookGroup?.let {
             binding.btnDelete.visible(it.groupId > 0 || it.groupId == Long.MIN_VALUE)
             binding.tieGroupName.setText(it.groupName)
-            binding.ivCover.load(it.cover)
+            if (bookGroup?.cover != null)
+                binding.ivCover.load(it.cover)
             binding.spSort.setSelection(it.bookSort + 1)
             binding.cbEnableRefresh.isChecked = it.enableRefresh
         } ?: let {
@@ -78,6 +79,14 @@ class GroupEditDialog() : BaseBottomSheetDialogFragment(R.layout.dialog_book_gro
         binding.run {
             ivCover.onClick {
                 selectImage.launch()
+            }
+            btnReset.onClick {
+                bookGroup?.let {
+                    viewModel.clearCover(it) {
+                        toastOnUi("封面已重置")
+                        dismiss()
+                    }
+                }
             }
             btnCancel.onClick {
                 dismiss()

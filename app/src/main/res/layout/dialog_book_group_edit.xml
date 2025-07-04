@@ -19,7 +19,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:padding="16dp">
 
@@ -30,7 +30,7 @@
             android:layout_margin="8dp"
             android:contentDescription="@string/img_cover"
             android:scaleType="centerCrop"
-            android:src="@drawable/image_cover_default"
+            android:src="?attr/colorSurfaceVariant"
             tools:ignore="ImageContrastCheck" />
 
         <LinearLayout
@@ -80,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/allow_drop_down_refresh"
                 android:checked="true" />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -95,9 +96,17 @@
             android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:text="@string/delete"
+            style="@style/Widget.Material3.Button.IconButton.Outlined"
+            android:layout_marginEnd="4dp"
+            app:icon="@drawable/ic_clear_all"
             tools:ignore="RtlHardcoded" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_restore"
+            style="@style/Widget.Material3.Button.IconButton.Outlined"/>
 
         <Space
             android:layout_width="0dp"
@@ -109,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:text="@string/cancel" />
 
         <com.google.android.material.button.MaterialButton

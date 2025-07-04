@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import com.google.android.material.chip.Chip
 import io.legato.kazusa.R
 import io.legato.kazusa.base.VMBaseFragment
 import io.legato.kazusa.constant.EventBus
@@ -30,9 +32,6 @@ import io.legato.kazusa.ui.file.HandleFileContract
 import io.legato.kazusa.ui.main.MainFragmentInterface
 import io.legato.kazusa.ui.main.MainViewModel
 import io.legato.kazusa.ui.widget.dialog.WaitDialog
-import io.legato.kazusa.utils.bookshelfLayout
-import io.legato.kazusa.utils.checkByIndex
-import io.legato.kazusa.utils.getCheckedIndex
 import io.legato.kazusa.utils.isAbsUrl
 import io.legato.kazusa.utils.postEvent
 import io.legato.kazusa.utils.readText
@@ -166,7 +165,7 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
 
     @SuppressLint("InflateParams")
     fun configBookshelf() {
-        alert(titleResource = R.string.bookshelf_layout) {
+        alert {
 
             val orientation = requireContext().resources.configuration.orientation
             val bookshelfLayout = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -182,20 +181,53 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
             val alertBinding =
                 DialogBookshelfConfigBinding.inflate(layoutInflater)
                     .apply {
-                        spGroupStyle.setSelection(AppConfig.bookGroupStyle)
+
+                        val groupStyleArray = resources.getStringArray(R.array.group_style)
+                        val chipGroupStyle = chipGroupStyle
+
+                        groupStyleArray.forEachIndexed { index, label ->
+                            val chip = Chip(context).apply {
+                                text = label
+                                isCheckable = true
+                                isClickable = true
+                                id = View.generateViewId()
+                            }
+                            chipGroupStyle.addView(chip)
+                            if (index == AppConfig.bookGroupStyle) {
+                                chipGroupStyle.check(chip.id)
+                            }
+                        }
+
+                        val sortArray = resources.getStringArray(R.array.bookshelf_px_array)
+                        val chipGroupSort = chipGroupSort
+
+                        sortArray.forEachIndexed { index, label ->
+                            val chip = Chip(context).apply {
+                                text = label
+                                isCheckable = true
+                                isClickable = true
+                                id = View.generateViewId()
+                            }
+                            chipGroupSort.addView(chip)
+                            if (index == AppConfig.bookshelfSort) {
+                                chipGroupSort.check(chip.id)
+                            }
+                        }
+
                         swShowUnread.isChecked = AppConfig.showUnread
                         swShowLastUpdateTime.isChecked = AppConfig.showLastUpdateTime
                         swShowWaitUpBooks.isChecked = AppConfig.showWaitUpCount
                         swShowBookshelfFastScroller.isChecked = AppConfig.showBookshelfFastScroller
-                        rgSort.checkByIndex(bookshelfSort)
 
                         chipList.isChecked = !isGrid
                         chipGrid.isChecked = isGrid
-                        llGridSlider.isVisible = isGrid
+                        sliderText.isVisible = isGrid
+                        sliderGridCount.isVisible = isGrid
                         sliderGridCount.value = columnCount.toFloat()
 
-                        chipGroupLayout.setOnCheckedChangeListener { _, checkedId ->
-                            llGridSlider.isVisible = checkedId == R.id.chip_grid
+                        chipGroupLayout.setOnCheckedStateChangeListener { group, checkedIds ->
+                            sliderText.isVisible = checkedIds.firstOrNull() == R.id.chip_grid
+                            sliderGridCount.isVisible = checkedIds.firstOrNull() == R.id.chip_grid
                         }
 
                     }
@@ -205,10 +237,12 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
                 alertBinding.apply {
                     var notifyMain = false
                     var recreate = false
-                    if (AppConfig.bookGroupStyle != spGroupStyle.selectedItemPosition) {
-                        AppConfig.bookGroupStyle = spGroupStyle.selectedItemPosition
+
+                    if (AppConfig.bookGroupStyle != chipGroupStyle.checkedChipId) {
+                        AppConfig.bookGroupStyle = chipGroupStyle.indexOfChild(chipGroupStyle.findViewById(chipGroupStyle.checkedChipId))
                         notifyMain = true
                     }
+
                     if (AppConfig.showUnread != swShowUnread.isChecked) {
                         AppConfig.showUnread = swShowUnread.isChecked
                         postEvent(EventBus.BOOKSHELF_REFRESH, "")
@@ -225,8 +259,8 @@ abstract class BaseBookshelfFragment(layoutId: Int) : VMBaseFragment<BookshelfVi
                         AppConfig.showBookshelfFastScroller = swShowBookshelfFastScroller.isChecked
                         postEvent(EventBus.BOOKSHELF_REFRESH, "")
                     }
-                    if (bookshelfSort != rgSort.getCheckedIndex()) {
-                        AppConfig.bookshelfSort = rgSort.getCheckedIndex()
+                    if (bookshelfSort != chipGroupSort.indexOfChild(chipGroupSort.findViewById(chipGroupSort.checkedChipId))) {
+                        AppConfig.bookshelfSort = chipGroupSort.indexOfChild(chipGroupSort.findViewById(chipGroupSort.checkedChipId))
                         upSort()
                     }
 

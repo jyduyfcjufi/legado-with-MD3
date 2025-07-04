@@ -15,6 +15,7 @@
 	<string-array name="group_style">
 		<item>Tab</item>
 		<item>Folder</item>
+		<item>Hide Tab</item>
 	</string-array>
 
 	<string-array name="book_sort">
@@ -193,6 +194,15 @@
 		<item>Default</item>
 		<item>Same color as content</item>
 		<item>Customize</item>
+	</string-array>
+
+	<string-array name="bookshelf_px_array">
+		<item>@string/bookshelf_px_0</item>
+		<item>@string/bookshelf_px_1</item>
+		<item>@string/bookshelf_px_2</item>
+		<item>@string/bookshelf_px_3</item>
+		<item>@string/bookshelf_px_4</item>
+		<item>@string/bookshelf_px_5</item>
 	</string-array>
 
 </resources>

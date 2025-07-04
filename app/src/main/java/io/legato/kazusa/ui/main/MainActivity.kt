@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
@@ -33,7 +32,6 @@ import io.legato.kazusa.help.config.LocalConfig
 import io.legato.kazusa.help.coroutine.Coroutine
 import io.legato.kazusa.help.storage.Backup
 import io.legato.kazusa.lib.dialogs.alert
-//import io.legado.app.lib.theme.primaryColor
 import io.legato.kazusa.service.BaseReadAloudService
 import io.legato.kazusa.ui.about.CrashLogsDialog
 import io.legato.kazusa.ui.main.bookshelf.BaseBookshelfFragment
@@ -45,9 +43,7 @@ import io.legato.kazusa.ui.main.rss.RssFragment
 import io.legato.kazusa.ui.widget.dialog.TextDialog
 import io.legato.kazusa.utils.hideSoftInput
 import io.legato.kazusa.utils.isCreated
-import io.legato.kazusa.utils.navigationBarHeight
 import io.legato.kazusa.utils.observeEvent
-import io.legato.kazusa.utils.setOnApplyWindowInsetsListenerCompat
 import io.legato.kazusa.utils.shouldHideSoftInput
 import io.legato.kazusa.utils.showDialogFragment
 import io.legato.kazusa.utils.toastOnUi
@@ -55,14 +51,11 @@ import io.legato.kazusa.utils.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import splitties.views.bottomPadding
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import androidx.core.view.get
 import com.google.android.material.navigation.NavigationBarView
-import io.legato.kazusa.ui.welcome.WelcomeActivity
-import io.legato.kazusa.utils.applyNavigationBarPadding
-import io.legato.kazusa.utils.applyStatusBarPadding
+import io.legato.kazusa.ui.main.bookshelf.style1.BookshelfFragment3
 
 /**
  * 主界面
@@ -76,6 +69,7 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
     private val idBookshelf = 0
     private val idBookshelf1 = 11
     private val idBookshelf2 = 12
+    private val idBookshelf3 = 13
     private val idExplore = 1
     private val idRss = 2
     private val idMy = 3
@@ -424,10 +418,16 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
     private fun getFragmentId(position: Int): Int {
         val id = realPositions[position]
         if (id == idBookshelf) {
-            return if (AppConfig.bookGroupStyle == 1) idBookshelf2 else idBookshelf1
+            return when (AppConfig.bookGroupStyle) {
+                0 -> idBookshelf1
+                1 -> idBookshelf2
+                2 -> idBookshelf3
+                else -> idBookshelf1
+            }
         }
         return id
     }
+
 
     private inner class PageChangeCallback : ViewPager.SimpleOnPageChangeListener() {
 
@@ -447,24 +447,28 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
         }
 
         override fun getItemPosition(any: Any): Int {
-            val position = (any as MainFragmentInterface).position
-                ?: return POSITION_NONE
+            val position = (any as? MainFragmentInterface)?.position ?: return POSITION_NONE
             val fragmentId = getId(position)
-            if ((fragmentId == idBookshelf1 && any is BookshelfFragment1)
-                || (fragmentId == idBookshelf2 && any is BookshelfFragment2)
-                || (fragmentId == idExplore && any is ExploreFragment)
-                || (fragmentId == idRss && any is RssFragment)
-                || (fragmentId == idMy && any is MyFragment)
+
+            if (
+                (fragmentId == idBookshelf1 && any is BookshelfFragment1) ||
+                (fragmentId == idBookshelf2 && any is BookshelfFragment2) ||
+                (fragmentId == idBookshelf3 && any is BookshelfFragment3) ||
+                (fragmentId == idExplore && any is ExploreFragment) ||
+                (fragmentId == idRss && any is RssFragment) ||
+                (fragmentId == idMy && any is MyFragment)
             ) {
                 return POSITION_UNCHANGED
             }
             return POSITION_NONE
         }
 
+
         override fun getItem(position: Int): Fragment {
             return when (getId(position)) {
                 idBookshelf1 -> BookshelfFragment1(position)
                 idBookshelf2 -> BookshelfFragment2(position)
+                idBookshelf3 -> BookshelfFragment3(position)
                 idExplore -> ExploreFragment(position)
                 idRss -> RssFragment(position)
                 else -> MyFragment(position)

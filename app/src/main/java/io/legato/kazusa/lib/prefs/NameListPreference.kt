@@ -18,7 +18,6 @@ class NameListPreference(context: Context, attrs: AttributeSet) : ListPreference
 
     init {
         layoutResource = R.layout.view_preference
-        widgetLayoutResource = R.layout.item_fillet_text
         context.withStyledAttributes(attrs, R.styleable.Preference) {
             isBottomBackground = getBoolean(R.styleable.Preference_isBottomBackground, false)
         }
@@ -26,16 +25,16 @@ class NameListPreference(context: Context, attrs: AttributeSet) : ListPreference
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         val v = Preference.bindView<TextView>(
-            context, holder, icon, title, summary, widgetLayoutResource,
+            context, holder, icon, title, entry,
             R.id.text_view, isBottomBackground = isBottomBackground
         )
         if (v is TextView) {
             v.text = entry
-            if (isBottomBackground) {
+//            if (isBottomBackground) {
 //                val bgColor = context.bottomBackground
-//                val pTextColor = context.getPrimaryTextColor(ColorUtils.isColorLight(bgColor))
-                //v.setTextColor(pTextColor)
-            }
+//               val pTextColor = context.getPrimaryTextColor(ColorUtils.isColorLight(bgColor))
+//                //v.setTextColor(pTextColor)
+//            }
         }
         super.onBindViewHolder(holder)
     }

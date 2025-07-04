@@ -8,27 +8,24 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import io.legato.kazusa.R
 import io.legato.kazusa.data.appDb
 import io.legato.kazusa.data.entities.Book
 import io.legato.kazusa.data.entities.BookGroup
-import io.legato.kazusa.databinding.FragmentBookshelf1Binding
+import io.legato.kazusa.databinding.FragmentBookshelf3Binding
 import io.legato.kazusa.help.config.AppConfig
-import io.legato.kazusa.ui.book.group.GroupEditDialog
 import io.legato.kazusa.ui.book.search.SearchActivity
 import io.legato.kazusa.ui.main.bookshelf.BaseBookshelfFragment
 import io.legato.kazusa.ui.main.bookshelf.style1.books.BooksFragment
-import io.legato.kazusa.utils.showDialogFragment
-import io.legato.kazusa.utils.toastOnUi
 import io.legato.kazusa.utils.viewbindingdelegate.viewBinding
 import kotlin.collections.set
 
 /**
  * 书架界面
  */
-class BookshelfFragment1() : BaseBookshelfFragment(R.layout.fragment_bookshelf1),
+class BookshelfFragment3() : BaseBookshelfFragment(R.layout.fragment_bookshelf3),
     TabLayout.OnTabSelectedListener,
     SearchView.OnQueryTextListener {
 
@@ -38,7 +35,7 @@ class BookshelfFragment1() : BaseBookshelfFragment(R.layout.fragment_bookshelf1)
         arguments = bundle
     }
 
-    private val binding by viewBinding(FragmentBookshelf1Binding::bind)
+    private val binding by viewBinding(FragmentBookshelf3Binding::bind)
 
     private val bookGroups = mutableListOf<BookGroup>()
     private val fragmentMap = hashMapOf<Long, BooksFragment>()
@@ -66,9 +63,18 @@ class BookshelfFragment1() : BaseBookshelfFragment(R.layout.fragment_bookshelf1)
         binding.viewPagerBookshelf.adapter = adapter
         binding.viewPagerBookshelf.offscreenPageLimit = 1
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPagerBookshelf) { tab, position ->
-            tab.text = bookGroups[position].groupName
-        }.attach()
+        binding.viewPagerBookshelf.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                updateToolbarTitle(position)
+            }
+        })
+    }
+
+    private fun updateToolbarTitle(position: Int) {
+        if (bookGroups.isNotEmpty() && position in 0 until bookGroups.size) {
+            binding.collTopBar.title = bookGroups[position].groupName
+        }
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -93,20 +99,7 @@ class BookshelfFragment1() : BaseBookshelfFragment(R.layout.fragment_bookshelf1)
                 adapter = TabFragmentPageAdapter(this)
                 binding.viewPagerBookshelf.adapter = adapter
 
-                TabLayoutMediator(binding.tabLayout, binding.viewPagerBookshelf) { tab, position ->
-                    tab.text = bookGroups[position].groupName
-                }.attach()
-
-                selectLastTab()
-
-                binding.tabLayout.post {
-                    for (i in 0 until bookGroups.size) {
-                        binding.tabLayout.getTabAt(i)?.view?.setOnLongClickListener {
-                            showDialogFragment(GroupEditDialog(bookGroups[i]))
-                            true
-                        }
-                    }
-                }
+                updateToolbarTitle(binding.viewPagerBookshelf.currentItem)
             }
         }
     }
@@ -125,20 +118,7 @@ class BookshelfFragment1() : BaseBookshelfFragment(R.layout.fragment_bookshelf1)
         }
     }
 
-    private fun selectLastTab() {
-        binding.tabLayout.post {
-            binding.tabLayout.removeOnTabSelectedListener(this)
-            binding.tabLayout.getTabAt(AppConfig.saveTabPosition)?.select()
-            binding.tabLayout.addOnTabSelectedListener(this)
-        }
-    }
-
     override fun onTabReselected(tab: TabLayout.Tab) {
-        selectedGroup?.let { group ->
-            fragmentMap[group.groupId]?.let {
-                toastOnUi("${group.groupName}(${it.getBooksCount()})")
-            }
-        }
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab) = Unit

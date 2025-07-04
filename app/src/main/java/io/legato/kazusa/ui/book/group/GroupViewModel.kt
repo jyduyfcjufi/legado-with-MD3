@@ -48,5 +48,12 @@ class GroupViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
+    fun clearCover(bookGroup: BookGroup, finally: () -> Unit) {
+        execute {
+            appDb.bookGroupDao.clearCover(bookGroup.groupId)
+        }.onFinally {
+            finally()
+        }
+    }
 
 }

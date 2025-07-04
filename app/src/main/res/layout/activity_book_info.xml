@@ -22,8 +22,8 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            style="?attr/collapsingToolbarLayoutLargeSize"
+            android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+            style="?attr/collapsingToolbarLayoutMediumStyle"
             app:collapsedTitleTextAppearance="?attr/textAppearanceTitleLarge"
             app:expandedTitleTextAppearance="?attr/textAppearanceHeadlineLarge"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -275,7 +275,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="6dp"
-                                android:singleLine="true"
                                 android:textSize="14sp"
                                 tools:ignore="NestedWeights,RtlHardcoded,RtlSymmetry"
                                 tools:text="@string/read_dur_progress" />
@@ -289,7 +288,7 @@
                                     android:id="@+id/tv_chapter"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="?attr/colorSecondaryVariant"
+                                    android:textColor="?attr/colorPrimaryVariant"
                                     android:singleLine="true"
                                     android:paddingEnd="8dp"
                                     android:textSize="14sp"

@@ -3,6 +3,7 @@ package io.legato.kazusa.ui.main.bookshelf.style1.books
 import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import io.legato.kazusa.base.adapter.ItemViewHolder
@@ -10,7 +11,6 @@ import io.legato.kazusa.data.entities.Book
 import io.legato.kazusa.databinding.ItemBookshelfListBinding
 import io.legato.kazusa.help.book.isLocal
 import io.legato.kazusa.help.config.AppConfig
-import io.legato.kazusa.utils.invisible
 import io.legato.kazusa.utils.toTimeAgo
 import splitties.views.onLongClick
 
@@ -68,15 +68,16 @@ class BooksAdapterList(
 
     private fun upRefresh(binding: ItemBookshelfListBinding, item: Book) {
         if (!item.isLocal && callBack.isUpdate(item.bookUrl)) {
-            binding.bvUnread.invisible()
-            binding.rlLoading.visible()
+            binding.tvUnread.isVisible = false
+            binding.rlLoading.isVisible = true
         } else {
-            binding.rlLoading.gone()
+            binding.rlLoading.isVisible = false
             if (AppConfig.showUnread) {
-                binding.bvUnread.setHighlight(item.lastCheckCount > 0)
-                binding.bvUnread.setBadgeCount(item.getUnreadChapterNum())
+                //binding.tvUnread.setHighlight(item.lastCheckCount > 0)
+                binding.tvUnread.isVisible = true
+                binding.tvUnread.text = item.getUnreadChapterNum().toString()
             } else {
-                binding.bvUnread.invisible()
+                binding.tvUnread.isVisible = false
             }
         }
     }
@@ -94,13 +95,13 @@ class BooksAdapterList(
 
     override fun registerListener(holder: ItemViewHolder, binding: ItemBookshelfListBinding) {
         holder.itemView.apply {
-            setOnClickListener {
+            binding.cvContent.setOnClickListener {
                 getItem(holder.layoutPosition)?.let {
                     callBack.open(it)
                 }
             }
 
-            onLongClick {
+            binding.cvContent.onLongClick {
                 getItem(holder.layoutPosition)?.let {
                     callBack.openBookInfo(it)
                 }

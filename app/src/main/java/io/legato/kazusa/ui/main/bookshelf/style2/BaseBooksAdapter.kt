@@ -46,10 +46,7 @@ abstract class BaseBooksAdapter<VH : RecyclerView.ViewHolder>(
                             oldItem.getUnreadChapterNum() == newItem.getUnreadChapterNum()
                 }
 
-                oldItem is BookGroup && newItem is BookGroup -> {
-                    oldItem.groupName == newItem.groupName &&
-                            oldItem.cover == newItem.cover
-                }
+                oldItem is BookGroup && newItem is BookGroup -> false
 
                 else -> false
             }
@@ -119,6 +116,12 @@ abstract class BaseBooksAdapter<VH : RecyclerView.ViewHolder>(
     fun getItems() = asyncListDiffer.currentList
 
     fun getItem(position: Int) = getItems().getOrNull(position)
+
+    internal var allBooks: List<Book> = emptyList()
+
+    fun setAllBooks(all: List<Book>) {
+        this.allBooks = all
+    }
 
     override fun getItemCount(): Int {
         return getItems().size

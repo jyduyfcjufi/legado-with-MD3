@@ -4,13 +4,16 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import io.legato.kazusa.R
 import io.legato.kazusa.data.entities.Book
 import io.legato.kazusa.data.entities.BookGroup
 import io.legato.kazusa.databinding.ItemBookshelfGridBinding
 import io.legato.kazusa.databinding.ItemBookshelfGridGroupBinding
 import io.legato.kazusa.help.book.isLocal
 import io.legato.kazusa.help.config.AppConfig
+import io.legato.kazusa.utils.gone
 import splitties.views.onLongClick
 
 @Suppress("UNUSED_PARAMETER")
@@ -32,31 +35,40 @@ class BooksAdapterGrid(context: Context, callBack: CallBack) :
         position: Int,
         payloads: MutableList<Any>
     ) {
+
         when (holder) {
             is BookViewHolder -> (getItem(position) as? Book)?.let {
                 holder.registerListener(it)
-                holder.onBind(it, position, payloads)
+                holder.onBind(it, payloads)
             }
 
             is GroupViewHolder -> (getItem(position) as? BookGroup)?.let {
                 holder.registerListener(it)
-                holder.onBind(it, position, payloads)
+                holder.onBind(it, payloads)
             }
+        }
+    }
+
+    private fun getBooksForGroup(group: BookGroup): List<Book> {
+        return if (group.groupId == -1L) {
+            allBooks.take(4)
+        } else {
+            allBooks.filter { (it.group and group.groupId) != 0L }.take(4)
         }
     }
 
     inner class BookViewHolder(val binding: ItemBookshelfGridBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: Book, position: Int) = binding.run {
+        fun onBind(item: Book) = binding.run {
             tvName.text = item.name
             ivCover.load(item.getDisplayCover(), item.name, item.author, false, item.origin)
             upRefresh(this, item)
         }
 
-        fun onBind(item: Book, position: Int, payloads: MutableList<Any>) = binding.run {
+        fun onBind(item: Book, payloads: MutableList<Any>) = binding.run {
             if (payloads.isEmpty()) {
-                onBind(item, position)
+                onBind(item)
             } else {
                 for (i in payloads.indices) {
                     val bundle = payloads[i] as Bundle
@@ -79,10 +91,10 @@ class BooksAdapterGrid(context: Context, callBack: CallBack) :
         }
 
         fun registerListener(item: Any) {
-            binding.root.setOnClickListener {
+            binding.cvContent.setOnClickListener {
                 callBack.onItemClick(item)
             }
-            binding.root.onLongClick {
+            binding.cvContent.onLongClick {
                 callBack.onItemLongClick(item)
             }
         }
@@ -113,21 +125,22 @@ class BooksAdapterGrid(context: Context, callBack: CallBack) :
     inner class GroupViewHolder(val binding: ItemBookshelfGridGroupBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(item: BookGroup, position: Int) = binding.run {
+        fun onBind(item: BookGroup) = binding.run {
             tvName.text = item.groupName
-            ivCover.load(item.cover)
+            loadGroupCover(item)
+            cdUnread.gone()
         }
 
-        fun onBind(item: BookGroup, position: Int, payloads: MutableList<Any>) = binding.run {
+        fun onBind(item: BookGroup, payloads: MutableList<Any>) = binding.run {
             if (payloads.isEmpty()) {
-                onBind(item, position)
+                onBind(item)
             } else {
                 for (i in payloads.indices) {
                     val bundle = payloads[i] as Bundle
                     bundle.keySet().forEach {
                         when (it) {
                             "groupName" -> tvName.text = item.groupName
-                            "cover" -> ivCover.load(item.cover)
+                            "cover" -> loadGroupCover(item)
                         }
                     }
                 }
@@ -140,6 +153,28 @@ class BooksAdapterGrid(context: Context, callBack: CallBack) :
             }
             binding.cvContent.onLongClick {
                 callBack.onItemLongClick(item)
+            }
+        }
+
+        private fun loadGroupCover(item: BookGroup) = binding.run {
+
+            binding.ivCover.setImageDrawable(
+                ContextCompat.getDrawable(binding.root.context, R.drawable.bg_surface_variant)
+            )
+            binding.ivCover1.setImageDrawable(null)
+            binding.ivCover2.setImageDrawable(null)
+            binding.ivCover3.setImageDrawable(null)
+            binding.ivCover4.setImageDrawable(null)
+            if (!item.cover.isNullOrEmpty()) {
+                ivCover.load(item.cover)
+            } else {
+
+                val books = getBooksForGroup(item)
+
+                if (books.size > 0) binding.ivCover1.load(books[0].getDisplayCover())
+                if (books.size > 1) binding.ivCover2.load(books[1].getDisplayCover())
+                if (books.size > 2) binding.ivCover3.load(books[2].getDisplayCover())
+                if (books.size > 3) binding.ivCover4.load(books[3].getDisplayCover())
             }
         }
 
