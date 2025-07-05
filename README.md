@@ -1,5 +1,3 @@
-# [English](English.md) [中文](README.md)
-
 >注意，此版本为Material Design 3风格重构版本，仍在快速更新。
 >
 >
@@ -9,9 +7,23 @@
 >软件不提供内容，需要您自己手动添加，例如导入书源等。
 >看看 [官方帮助文档](https://www.yuque.com/legado/wiki)，也许里面就有你要的答案。
 
+与[官方版本](https://github.com/gedoor/legado)的区别：
+
+
+
+重新设计界面，使用Material Design 3主题。
+
+适配横屏，增加横屏书架列数等功能。
+
+
+
+注意，目前不使用官方的主题系统，一些设置无效，且很多界面与官方差异较大。
+
+日后会增加基于现在主题系统的自定义功能。
+
+
 # Function-主要功能
 [English](English.md)
-
 <details><summary>中文</summary>
 1.自定义书源，自己设置规则，抓取网页数据，规则简单易懂，软件内有规则说明。<br>
 2.列表书架，网格书架自由切换。<br>
