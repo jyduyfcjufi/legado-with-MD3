@@ -1,4 +1,4 @@
-package io.legato.kazusa.ui.main.bookshelf.style1.books
+package io.legato.kazusa.ui.main.bookshelf.books.styleDefalut
 
 import android.content.Context
 import android.os.Bundle

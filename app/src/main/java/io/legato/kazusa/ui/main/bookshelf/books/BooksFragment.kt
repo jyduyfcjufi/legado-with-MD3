@@ -1,7 +1,6 @@
-package io.legato.kazusa.ui.main.bookshelf.style1.books
+package io.legato.kazusa.ui.main.bookshelf.books
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewConfiguration
@@ -28,6 +27,9 @@ import io.legato.kazusa.help.config.AppConfig
 //import io.legado.app.lib.theme.primaryColor
 import io.legato.kazusa.ui.book.info.BookInfoActivity
 import io.legato.kazusa.ui.main.MainViewModel
+import io.legato.kazusa.ui.main.bookshelf.books.styleDefalut.BaseBooksAdapter
+import io.legato.kazusa.ui.main.bookshelf.books.styleDefalut.BooksAdapterGrid
+import io.legato.kazusa.ui.main.bookshelf.books.styleDefalut.BooksAdapterList
 import io.legato.kazusa.utils.bookshelfLayout
 import io.legato.kazusa.utils.cnCompare
 import io.legato.kazusa.utils.flowWithLifecycleAndDatabaseChangeFirst
@@ -147,12 +149,12 @@ class BooksFragment() : BaseFragment(R.layout.fragment_books),
         }
     }
 
-    fun upBookSort(sort: Int) {
-        binding.root.post {
-            arguments?.putInt("bookSort", sort)
-            bookSort = sort
+    fun upBookSort() {
+//        binding.root.post {
+//            arguments?.putInt("bookSort", sort)
+//            bookSort = sort
             upRecyclerData()
-        }
+//        }
     }
 
     fun setEnableRefresh(enable: Boolean) {
@@ -168,24 +170,36 @@ class BooksFragment() : BaseFragment(R.layout.fragment_books),
         booksFlowJob = viewLifecycleOwner.lifecycleScope.launch {
             appDb.bookDao.flowByGroup(groupId).map { list ->
                 //排序
+
+                val isDescending = AppConfig.bookshelfSortOrder == 1
+
                 when (bookSort) {
-                    1 -> list.sortedByDescending { it.latestChapterTime }
-                    2 -> list.sortedWith { o1, o2 ->
-                        o1.name.cnCompare(o2.name)
-                    }
+                    1 -> if (isDescending) list.sortedByDescending { it.latestChapterTime }
+                    else list.sortedBy { it.latestChapterTime }
 
-                    3 -> list.sortedBy { it.order }
+                    2 -> if (isDescending)
+                        list.sortedWith { o1, o2 -> o2.name.cnCompare(o1.name) }
+                    else
+                        list.sortedWith { o1, o2 -> o1.name.cnCompare(o2.name) }
 
-                    // 综合排序 issue #3192
-                    4 -> list.sortedByDescending {
-                        max(it.latestChapterTime, it.durChapterTime)
-                    }
-                    // 按作者排序
-                    5 -> list.sortedWith { o1, o2 ->
-                        o1.author.cnCompare(o2.author)
-                    }
+                    3 -> if (isDescending) list.sortedByDescending { it.order }
+                    else list.sortedBy { it.order }
 
-                    else -> list.sortedByDescending { it.durChapterTime }
+                    4 -> if (isDescending) list.sortedByDescending {
+                        max(
+                            it.latestChapterTime,
+                            it.durChapterTime
+                        )
+                    }
+                    else list.sortedBy { max(it.latestChapterTime, it.durChapterTime) }
+
+                    5 -> if (isDescending)
+                        list.sortedWith { o1, o2 -> o2.author.cnCompare(o1.author) }
+                    else
+                        list.sortedWith { o1, o2 -> o1.author.cnCompare(o2.author) }
+
+                    else -> if (isDescending) list.sortedByDescending { it.durChapterTime }
+                    else list.sortedBy { it.durChapterTime }
                 }
             }.flowWithLifecycleAndDatabaseChangeFirst(
                 viewLifecycleOwner.lifecycle,
@@ -197,7 +211,6 @@ class BooksFragment() : BaseFragment(R.layout.fragment_books),
                 binding.tvEmptyMsg.isGone = list.isNotEmpty()
                 binding.refreshLayout.isEnabled = enableRefresh && list.isNotEmpty()
                 booksAdapter.setItems(list)
-                delay(100)
             }
         }
     }

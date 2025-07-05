@@ -1,4 +1,4 @@
-package io.legato.kazusa.ui.main.bookshelf.style2
+package io.legato.kazusa.ui.main.bookshelf.books
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -24,6 +24,9 @@ import io.legato.kazusa.ui.book.group.GroupEditDialog
 import io.legato.kazusa.ui.book.info.BookInfoActivity
 import io.legato.kazusa.ui.book.search.SearchActivity
 import io.legato.kazusa.ui.main.bookshelf.BaseBookshelfFragment
+import io.legato.kazusa.ui.main.bookshelf.books.styleFold.BaseBooksAdapter
+import io.legato.kazusa.ui.main.bookshelf.books.styleFold.BooksAdapterGrid
+import io.legato.kazusa.ui.main.bookshelf.books.styleFold.BooksAdapterList
 import io.legato.kazusa.utils.bookshelfLayout
 import io.legato.kazusa.utils.cnCompare
 import io.legato.kazusa.utils.flowWithLifecycleAndDatabaseChangeFirst
@@ -39,7 +42,6 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.util.Locale
 import kotlin.math.max
 
 /**
@@ -69,7 +71,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
 
     private var bookGroups: List<BookGroup> = emptyList()
     private var booksFlowJob: Job? = null
-    override var groupId = BookGroup.IdRoot
+    override var groupId = BookGroup.Companion.IdRoot
     private var allBooks: List<Book> = emptyList()
     override var books: List<Book> = emptyList()
     private var enableRefresh = true
@@ -134,7 +136,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
         allBooksFlowJob?.cancel()
         allBooksFlowJob = viewLifecycleOwner.lifecycleScope.launch {
             appDb.bookDao.flowAll().map { list ->
-                when (AppConfig.getBookSortByGroupId(BookGroup.IdRoot)) {
+                when (AppConfig.getBookSortByGroupId(BookGroup.Companion.IdRoot)) {
                     1 -> list.sortedByDescending { it.latestChapterTime }
                     2 -> list.sortedWith { o1, o2 -> o1.name.cnCompare(o2.name) }
                     3 -> list.sortedBy { it.order }
@@ -144,7 +146,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
             }.flowWithLifecycleAndDatabaseChangeFirst(
                 viewLifecycleOwner.lifecycle,
                 Lifecycle.State.RESUMED,
-                AppDatabase.BOOK_TABLE_NAME
+                AppDatabase.Companion.BOOK_TABLE_NAME
             ).catch {
                 AppLog.put("所有书籍更新出错", it)
             }.conflate().flowOn(Dispatchers.Default).collect { list ->
@@ -156,7 +158,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
     }
 
     private fun initBooksData() {
-        if (groupId == BookGroup.IdRoot) {
+        if (groupId == BookGroup.Companion.IdRoot) {
             if (isAdded) {
                 binding.titleBar.title = getString(R.string.bookshelf)
                 binding.refreshLayout.isEnabled = true
@@ -173,9 +175,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
         }
         booksFlowJob?.cancel()
         booksFlowJob = viewLifecycleOwner.lifecycleScope.launch {
-
             appDb.bookDao.flowByGroup(groupId).map { list ->
-
                 //排序
                 val isDescending = AppConfig.bookshelfSortOrder == 1
 
@@ -183,14 +183,26 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
                     1 -> if (isDescending) list.sortedByDescending { it.latestChapterTime }
                     else list.sortedBy { it.latestChapterTime }
 
-                    2 -> if (isDescending) list.sortedWith(compareByDescending { it.name.cnCompareKey() })
-                    else list.sortedWith(compareBy { it.name.cnCompareKey() })
+                    2 -> if (isDescending)
+                        list.sortedWith { o1, o2 -> o2.name.cnCompare(o1.name) }
+                    else
+                        list.sortedWith { o1, o2 -> o1.name.cnCompare(o2.name) }
 
                     3 -> if (isDescending) list.sortedByDescending { it.order }
                     else list.sortedBy { it.order }
 
-                    4 -> if (isDescending) list.sortedByDescending { max(it.latestChapterTime, it.durChapterTime) }
+                    4 -> if (isDescending) list.sortedByDescending {
+                        max(
+                            it.latestChapterTime,
+                            it.durChapterTime
+                        )
+                    }
                     else list.sortedBy { max(it.latestChapterTime, it.durChapterTime) }
+
+                    5 -> if (isDescending)
+                        list.sortedWith { o1, o2 -> o2.author.cnCompare(o1.author) }
+                    else
+                        list.sortedWith { o1, o2 -> o1.author.cnCompare(o2.author) }
 
                     else -> if (isDescending) list.sortedByDescending { it.durChapterTime }
                     else list.sortedBy { it.durChapterTime }
@@ -199,7 +211,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
             }.flowWithLifecycleAndDatabaseChangeFirst(
                 viewLifecycleOwner.lifecycle,
                 Lifecycle.State.RESUMED,
-                AppDatabase.BOOK_TABLE_NAME
+                AppDatabase.Companion.BOOK_TABLE_NAME
             ).catch {
                 AppLog.put("书架更新出错", it)
             }.conflate().flowOn(Dispatchers.Default).collect { list ->
@@ -211,13 +223,9 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
         }
     }
 
-    fun String.cnCompareKey(): String {
-        return this.trim().lowercase(Locale.getDefault())
-    }
-
     fun back(): Boolean {
-        if (groupId != BookGroup.IdRoot) {
-            groupId = BookGroup.IdRoot
+        if (groupId != BookGroup.Companion.IdRoot) {
+            groupId = BookGroup.Companion.IdRoot
             initBooksData()
             return true
         }
@@ -225,7 +233,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        SearchActivity.start(requireContext(), query)
+        SearchActivity.Companion.start(requireContext(), query)
         return false
     }
 
@@ -268,7 +276,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
     }
 
     fun getItemCount(): Int {
-        return if (groupId == BookGroup.IdRoot) {
+        return if (groupId == BookGroup.Companion.IdRoot) {
             bookGroups.size + books.size
         } else {
             books.size
@@ -276,7 +284,7 @@ class BookshelfFragment2() : BaseBookshelfFragment(R.layout.fragment_bookshelf2)
     }
 
     override fun getItems(): List<Any> {
-        return if (groupId == BookGroup.IdRoot) {
+        return if (groupId == BookGroup.Companion.IdRoot) {
             bookGroups + books
         } else {
             books

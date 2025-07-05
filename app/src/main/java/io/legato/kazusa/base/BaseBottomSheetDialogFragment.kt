@@ -2,11 +2,13 @@ package io.legato.kazusa.base
 
 import android.content.DialogInterface
 import android.content.DialogInterface.OnDismissListener
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.legato.kazusa.constant.AppLog
 import io.legato.kazusa.help.coroutine.Coroutine
@@ -24,11 +26,14 @@ abstract class BaseBottomSheetDialogFragment(
         this.onDismissListener = onDismissListener
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) {
-//            setStyle(STYLE_NO_TITLE, 0)
-//        }
+    override fun onStart() {
+        super.onStart()
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            val screenHeight = resources.displayMetrics.heightPixels
+            (dialog as? BottomSheetDialog)?.behavior?.apply {
+                peekHeight = (screenHeight * 0.7f).toInt()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

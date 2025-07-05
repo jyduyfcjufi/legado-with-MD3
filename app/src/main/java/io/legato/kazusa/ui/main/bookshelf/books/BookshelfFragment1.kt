@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package io.legato.kazusa.ui.main.bookshelf.style1
+package io.legato.kazusa.ui.main.bookshelf.books
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -19,7 +19,6 @@ import io.legato.kazusa.help.config.AppConfig
 import io.legato.kazusa.ui.book.group.GroupEditDialog
 import io.legato.kazusa.ui.book.search.SearchActivity
 import io.legato.kazusa.ui.main.bookshelf.BaseBookshelfFragment
-import io.legato.kazusa.ui.main.bookshelf.style1.books.BooksFragment
 import io.legato.kazusa.utils.showDialogFragment
 import io.legato.kazusa.utils.toastOnUi
 import io.legato.kazusa.utils.viewbindingdelegate.viewBinding
@@ -116,11 +115,8 @@ class BookshelfFragment1() : BaseBookshelfFragment(R.layout.fragment_bookshelf1)
             if (it is BooksFragment) {
                 val position = it.position
                 val group = bookGroups.getOrNull(position) ?: return@forEach
-                val newSort = group.getRealBookSort()
                 it.setEnableRefresh(group.enableRefresh)
-                if (it.bookSort != newSort) {
-                    it.upBookSort(newSort)
-                }
+                it.upBookSort()
             }
         }
     }

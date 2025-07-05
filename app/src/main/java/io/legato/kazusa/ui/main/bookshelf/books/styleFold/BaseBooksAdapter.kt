@@ -1,4 +1,4 @@
-package io.legato.kazusa.ui.main.bookshelf.style2
+package io.legato.kazusa.ui.main.bookshelf.books.styleFold
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -35,8 +35,8 @@ import io.legato.kazusa.lib.dialogs.alert
 import io.legato.kazusa.service.BaseReadAloudService
 import io.legato.kazusa.ui.about.CrashLogsDialog
 import io.legato.kazusa.ui.main.bookshelf.BaseBookshelfFragment
-import io.legato.kazusa.ui.main.bookshelf.style1.BookshelfFragment1
-import io.legato.kazusa.ui.main.bookshelf.style2.BookshelfFragment2
+import io.legato.kazusa.ui.main.bookshelf.books.BookshelfFragment1
+import io.legato.kazusa.ui.main.bookshelf.books.BookshelfFragment2
 import io.legato.kazusa.ui.main.explore.ExploreFragment
 import io.legato.kazusa.ui.main.my.MyFragment
 import io.legato.kazusa.ui.main.rss.RssFragment
@@ -55,7 +55,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import androidx.core.view.get
 import com.google.android.material.navigation.NavigationBarView
-import io.legato.kazusa.ui.main.bookshelf.style1.BookshelfFragment3
+import io.legato.kazusa.ui.main.bookshelf.books.BookshelfFragment3
 
 /**
  * 主界面
@@ -92,7 +92,6 @@ class MainActivity : VMBaseActivity<ActivityMainBinding, MainViewModel>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 绑定返回键逻辑
         onBackPressedDispatcher.addCallback(this) {
             if (pagePosition != 0) {
                 binding.viewPagerMain.currentItem = 0
