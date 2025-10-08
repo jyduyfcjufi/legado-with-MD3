@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import io.legato.kazusa.R
 import io.legato.kazusa.data.entities.Book
 import io.legato.kazusa.data.entities.BookGroup
-import io.legato.kazusa.databinding.ItemBookshelfListBinding
-import io.legato.kazusa.databinding.ItemBookshelfListGroupBinding
+import io.legato.kazusa.databinding.ItemBookshelfListCompactBinding
+import io.legato.kazusa.databinding.ItemBookshelfListCompactGroupBinding
 import io.legato.kazusa.help.book.isLocal
 import io.legato.kazusa.help.config.AppConfig
 import io.legato.kazusa.utils.gone
@@ -19,13 +19,13 @@ import io.legato.kazusa.utils.visible
 import splitties.views.onLongClick
 
 @Suppress("UNUSED_PARAMETER")
-class BooksAdapterList(context: Context, callBack: CallBack) :
+class BooksAdapterListCompact(context: Context, callBack: CallBack) :
     BaseBooksAdapter<RecyclerView.ViewHolder>(context, callBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            1 -> GroupViewHolder(ItemBookshelfListGroupBinding.inflate(inflater, parent, false))
-            else -> BookViewHolder(ItemBookshelfListBinding.inflate(inflater, parent, false))
+            1 -> GroupViewHolder(ItemBookshelfListCompactGroupBinding.inflate(inflater, parent, false))
+            else -> BookViewHolder(ItemBookshelfListCompactBinding.inflate(inflater, parent, false))
         }
     }
 
@@ -55,13 +55,12 @@ class BooksAdapterList(context: Context, callBack: CallBack) :
         }
     }
 
-    inner class BookViewHolder(val binding: ItemBookshelfListBinding) :
+    inner class BookViewHolder(val binding: ItemBookshelfListCompactBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: Book) = binding.run {
             tvName.text = item.name
             tvAuthor.text = item.author
-            tvRead.text = item.durChapterTitle
             tvLast.text = item.latestChapterTitle
             ivCover.load(item.getDisplayCover(), item.name, item.author, false, item.origin)
             cdUnread.visible()
@@ -82,7 +81,6 @@ class BooksAdapterList(context: Context, callBack: CallBack) :
                         when (it) {
                             "name" -> tvName.text = item.name
                             "author" -> tvAuthor.text = item.author
-                            "dur" -> tvRead.text = item.durChapterTitle
                             "last" -> tvLast.text = item.latestChapterTitle
                             "cover" -> ivCover.load(
                                 item.getDisplayCover(),
@@ -100,7 +98,7 @@ class BooksAdapterList(context: Context, callBack: CallBack) :
             }
         }
 
-        private fun upLastUpdateTime(binding: ItemBookshelfListBinding, item: Book) {
+        private fun upLastUpdateTime(binding: ItemBookshelfListCompactBinding, item: Book) {
             if (AppConfig.showLastUpdateTime && !item.isLocal) {
                 val time = item.latestChapterTime.toTimeAgo()
                 if (binding.tvLastUpdateTime.text != time) {
@@ -120,7 +118,7 @@ class BooksAdapterList(context: Context, callBack: CallBack) :
             }
         }
 
-        private fun upRefresh(binding: ItemBookshelfListBinding, item: Book) {
+        private fun upRefresh(binding: ItemBookshelfListCompactBinding, item: Book) {
             if (!item.isLocal && callBack.isUpdate(item.bookUrl)) {
                 binding.tvUnread.isVisible = false
                 binding.rlLoading.isVisible = true
@@ -138,7 +136,7 @@ class BooksAdapterList(context: Context, callBack: CallBack) :
 
     }
 
-    inner class GroupViewHolder(val binding: ItemBookshelfListGroupBinding) :
+    inner class GroupViewHolder(val binding: ItemBookshelfListCompactGroupBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: BookGroup) = binding.run {
@@ -180,8 +178,6 @@ class BooksAdapterList(context: Context, callBack: CallBack) :
             )
             binding.ivCover1.setImageDrawable(null)
             binding.ivCover2.setImageDrawable(null)
-            binding.ivCover3.setImageDrawable(null)
-            binding.ivCover4.setImageDrawable(null)
             if (!item.cover.isNullOrEmpty()) {
                 ivCover.load(item.cover)
             } else {
@@ -190,8 +186,6 @@ class BooksAdapterList(context: Context, callBack: CallBack) :
 
                 if (books.size > 0) binding.ivCover1.load(books[0].getDisplayCover())
                 if (books.size > 1) binding.ivCover2.load(books[1].getDisplayCover())
-                if (books.size > 2) binding.ivCover3.load(books[2].getDisplayCover())
-                if (books.size > 3) binding.ivCover4.load(books[3].getDisplayCover())
             }
         }
 
