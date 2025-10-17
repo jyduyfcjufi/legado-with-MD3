@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 76,
-    "identityHash": "0e6d06b6c163650c893a96ce6052dfd8",
+    "version": 77,
+    "identityHash": "ed8334991896eea7e666ac1f04b26011",
     "entities": [
       {
         "tableName": "books",
@@ -207,7 +207,19 @@
           "columnNames": [
             "bookUrl"
           ]
-        }
+        },
+        "indices": [
+          {
+            "name": "index_books_name_author",
+            "unique": false,
+            "columnNames": [
+              "name",
+              "author"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_books_name_author` ON `${TABLE_NAME}` (`name`, `author`)"
+          }
+        ]
       },
       {
         "tableName": "book_groups",
@@ -1792,7 +1804,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0e6d06b6c163650c893a96ce6052dfd8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ed8334991896eea7e666ac1f04b26011')"
     ]
   }
 }
